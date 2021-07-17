@@ -1,0 +1,12 @@
+{
+   "version": "1.0",
+   "defaultSchema": "MYTEST",
+   "schemas": [ {
+     "type": "jdbc",
+     "name": "MYTEST",
+     "jdbcUser": "posgres",
+     "jdbcPassword": "posgres",
+     "jdbcUrl": "jdbc:postgresql://127.0.0.1/multidb"
+   } ]
+}
+

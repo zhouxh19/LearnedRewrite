@@ -1,0 +1,4 @@
+requests==2.25.1
+sqlparse==0.4.1
+JPype1==1.2.1
+psycopg2==2.8.6

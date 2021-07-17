@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "defaultSchema": "hr",
+  "schemas": [
+    {
+      "name": "hr",
+      "type": "custom",
+      "factory": "hr.fer.zemris.calcite.jdbcproxy.JdbcProxySchema$Factory",
+      "operand": {
+        "connection": "myTestConnection.json",
+        "jdbcSchema": "hr",
+        "journalSuffix": "_journal",
+        "journalVersionField": "version_number",
+        "journalSubsequentVersionField": "subsequent_version_number",
+        "journalDefaultKey": ["id"],
+        "journalTables": {
+          "emps": ["empid"],
+          "depts": ["deptno"]
+        }
+      }
+    }
+  ]
+}

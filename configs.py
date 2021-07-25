@@ -26,7 +26,7 @@ def parse_cmd_args():
     parser.add_argument('--rewrite_policy', type=str, default='mcts', help='[mcts, topdown, arbitrary, heuristic]')
     parser.add_argument('--driver', type=str, default='org.postgresql.Driver', help='Calcite adapter')
     parser.add_argument('--sql', type=str, help='input query')
-
+    parser.add_argument('--parallel_num', type=int, default=1, help='Parallel Node Number')
 
     # mcts
     parser.add_argument('--num_turns', action="store", type=int, default=1,

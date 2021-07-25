@@ -1,0 +1,27 @@
+digraph G {
+	node1 [label="reward:3442.2099999999627"]
+	node2 [label="reward:3442.2099999999627" color=red]
+	node1 -> node2
+	node3 [label="reward:3442.2099999999627" color=red]
+	node2 -> node3
+	node4 [label="reward:3442.2099999999627" color=red]
+	node3 -> node4
+	node5 [label="reward:-147198.66000000003" color=red]
+	node4 -> node5
+	node6 [label="reward:-147198.66000000003" color=red]
+	node5 -> node6
+	node7 [label="reward:-147198.66000000003" color=red]
+	node6 -> node7
+	node8 [label="reward:-147198.66000000003" color=red]
+	node7 -> node8
+	node9 [label="reward:-147198.66000000003" color=red]
+	node8 -> node9
+	node10 [label="reward:-147198.66000000003" color=red]
+	node9 -> node10
+	node11 [label="reward:-147198.66000000003"]
+	node10 -> node11
+	node12 [label="reward:277.0" color=red]
+	node1 -> node12
+	node13 [label="reward:277.0"]
+	node12 -> node13
+}

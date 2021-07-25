@@ -5,6 +5,8 @@ import hashlib
 import logging
 import argparse
 
+from parallel_algorithm import parallel_node_selection
+
 from cost_estimator import previous_cost_estimation
 
 """
@@ -35,6 +37,12 @@ class Node():
 		self.children=[]
 		self.parent=parent
 		self.rewrite_sequence = []
+		self.node_num = 1
+
+		# for multiple node selection
+		self.non_computed = 1
+		self.selected_nodes = []
+		self.selected_nodes_utilities = []
 
 		self.db = db
 		self.origin_cost = origin_cost
@@ -72,7 +80,7 @@ class Node():
 
 				self.add_child(csql, self.db, self.origin_cost, self.rewriter, i)
 
-def UCTSEARCH(budget,root):
+def UCTSEARCH(budget,root, parallel_num):
 
 	root.selected = 1
 	root.node_children()  # first expand root's children
@@ -83,21 +91,27 @@ def UCTSEARCH(budget,root):
 		# if iter%20==19:
 		# 	logger.info("simulation: %d"%iter)
 		# 	logger.info(root)
+		if parallel_num == 1 or parallel_num > root.node_num: # select single node
+			front = TREEPOLICY(root) # node selection
+			front_list = [front]
+		else:
+			front_list = parallel_node_selection(root,parallel_num)
 
-		front = TREEPOLICY(root) # node selection
-		front.selected = 1
+		for front in front_list:
+			front.selected = 1
 
-		front.node_children()  # expansion
-		for c in front.children:
-			c.parent = front
+			front.node_children()  # expansion
+			for c in front.children:
+				c.parent = front
+			root.node_num = root.node_num + len(front.children)
 
-		reward = DEFAULTPOLICY(front) # estimation (simplified as the future cost reduction by default rewrite order)
-		# print("sub reward: " + str(reward))
-		if reward > front.reward:
-			BACKUP(front,reward) # backpropagation
+			reward = DEFAULTPOLICY(front) # estimation (simplified as the future cost reduction by default rewrite order)
+			# print("sub reward: " + str(reward))
+			if reward > front.reward:
+				BACKUP(front,reward) # backpropagation
 
+	# return the node with maximal utility
 	best_node = root
-
 	while best_node.is_terminal() == False:
 		bestchildren = [best_node.children[0]]
 		bestscore = best_node.children[0].reward

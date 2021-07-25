@@ -27,7 +27,7 @@ pip3 install -r requirements.txt
 
    `jupyter lab` 
 
-3. Run the `LearnedRewrite.ipynb` script in jupyter, which reads to-rewrite queries, calls the main.py script to rewrite the queries, and buffers the rewrite results in rewrite_set (in json format).
+3. Run the LearnedRewrite.ipynb script in jupyter, which reads to-rewrite queries, calls the main.py script to rewrite the queries, and buffers the rewrite results in rewrite_set (in json format).
 
 ## Estimation Model
 

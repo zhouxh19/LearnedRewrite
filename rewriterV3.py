@@ -205,7 +205,7 @@ def rewrite(args, db, origin_cost):
 
         for l in range(args.num_turns):
 
-            best_node = UCTSEARCH(args.num_sims / (l + 1), best_node) # select optimal rewritten query with mcts
+            best_node = UCTSEARCH(args.num_sims / (l + 1), best_node, args.parallel_num) # select optimal rewritten query with mcts
             print("level %d" % l)
             #print("Num Children: %d" % len(best_node.children))
             #for i, c in enumerate(best_node.children):

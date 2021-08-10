@@ -44,7 +44,7 @@ First 5 entries present the actions taken by Player1, second 5 entries present t
 Finally, I apply a reward function to this vector [5,97,3,5,1,32,56,87,101,8]
 """
 
-if __name__ == "__main__":
+def rewrite_sql():
 
     args = parse_cmd_args()
     db = Database(args)
@@ -55,7 +55,6 @@ if __name__ == "__main__":
     rewrite_dir = os.path.join(base_dir, 'queries', 'input_sql')
 
     sql = args.sql
-
     # s1: the origin cost (baseline) -- baseline
     # print(sql)
     origin_cost = previous_cost_estimation(sql, db)
@@ -67,3 +66,7 @@ if __name__ == "__main__":
     print("after-rewrite cost: "+str(rewritten_cost))
 
     print("-------")
+
+
+if __name__ == "__main__":
+    rewrite_sql()

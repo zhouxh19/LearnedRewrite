@@ -19,6 +19,9 @@ from mcts import *
 from configs import parse_cmd_args
 from database import Database, RewriteState
 from rewriter import rewrite
+from configs import parse_cmd_args
+from database import Database, RewriteState
+from rewriterV3 import rewrite
 from cost_estimator import previous_cost_estimation
 
 """
@@ -49,23 +52,18 @@ if __name__ == "__main__":
     base_dir = os.path.abspath(os.curdir)
     local_lib_dir = os.path.join(base_dir, 'libs')
 
-    query_dir = os.path.join(base_dir, 'queries', 'input_sql')
-    for file in sorted(os.listdir(query_dir)):
-        if not file.endswith('.sql'):
-            continue
+    rewrite_dir = os.path.join(base_dir, 'queries', 'input_sql')
 
-        with open(os.path.join(query_dir, file), 'r') as sql_file:
-            sqls = [sql.value for sql in sqlparse.parse(sql_file.read()) if sql.get_type() == 'SELECT']
-            for sql in sqls:
+    sql = args.sql
 
-                # s1: the origin cost (baseline) -- baseline
-                origin_cost = previous_cost_estimation(sql, db)
-                print(sql)
-                print("origin cost: "+str(origin_cost))
-                df
+    # s1: the origin cost (baseline) -- baseline
+    # print(sql)
+    origin_cost = previous_cost_estimation(sql, db)
+    # print("origin cost: "+str(origin_cost))
 
-                rewritten_sql = rewrite(sql, args, db, origin_cost, file) # mcts/topdown
-                rewritten_sql = str(rewritten_sql)
+    rewritten_sql = rewrite(args, db, origin_cost) # mcts/topdown
 
-                rewritten_cost = previous_cost_estimation(rewritten_sql, db)
-                print("after-rewrite cost: "+str(rewritten_cost))
+    rewritten_cost = previous_cost_estimation(rewritten_sql, db)
+    print("after-rewrite cost: "+str(rewritten_cost))
+
+    print("-------")

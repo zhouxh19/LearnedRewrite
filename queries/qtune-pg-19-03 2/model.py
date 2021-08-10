@@ -149,6 +149,7 @@ class ActorCritic:
                 self.critic_state_input: cur_state,
                 self.critic_action_input: predicted_action
             })[0]
+            print("Gradients:",grads)
 
             self.sess.run(self.optimize, feed_dict={
                 self.actor_state_input: cur_state,

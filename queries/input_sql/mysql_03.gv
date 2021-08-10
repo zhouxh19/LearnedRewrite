@@ -18,42 +18,10 @@ digraph G {
 	node8 -> node9
 	node10 [label="reward:-147198.66000000003" color=red]
 	node9 -> node10
-	node11 [label="reward:-147198.66000000003" color=red]
+	node11 [label="reward:-147198.66000000003"]
 	node10 -> node11
-	node12 [label="reward:-147198.66000000003" color=red]
-	node11 -> node12
-	node13 [label="reward:-147198.66000000003" color=red]
+	node12 [label="reward:277.0" color=red]
+	node1 -> node12
+	node13 [label="reward:277.0"]
 	node12 -> node13
-	node14 [label="reward:-147198.66000000003" color=red]
-	node13 -> node14
-	node15 [label="reward:-147198.66000000003" color=red]
-	node14 -> node15
-	node16 [label="reward:-147198.66000000003" color=red]
-	node15 -> node16
-	node17 [label="reward:-147198.66000000003" color=red]
-	node16 -> node17
-	node18 [label="reward:-147198.66000000003" color=red]
-	node17 -> node18
-	node19 [label="reward:-147198.66000000003" color=red]
-	node18 -> node19
-	node20 [label="reward:-147198.66000000003" color=red]
-	node19 -> node20
-	node21 [label="reward:-147198.66000000003" color=red]
-	node20 -> node21
-	node22 [label="reward:-147198.66000000003" color=red]
-	node21 -> node22
-	node23 [label="reward:-147198.66000000003" color=red]
-	node22 -> node23
-	node24 [label="reward:-147198.66000000003" color=red]
-	node23 -> node24
-	node25 [label="reward:-147198.66000000003" color=red]
-	node24 -> node25
-	node26 [label="reward:-147198.66000000003" color=red]
-	node25 -> node26
-	node27 [label="reward:-147198.66000000003" color=red]
-	node26 -> node27
-	node28 [label="reward:-147198.66000000003"]
-	node27 -> node28
-	node29 [label="reward:277.0"]
-	node1 -> node29
 }

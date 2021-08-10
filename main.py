@@ -6,7 +6,7 @@ import hashlib
 import logging
 import argparse
 
-
+import sys
 import os
 import sqlparse
 import time
@@ -15,16 +15,13 @@ import jpype as jp
 from jpype.types import *
 import jpype.imports
 
-
 from mcts import *
-
 from configs import parse_cmd_args
 from database import Database, RewriteState
 from rewriter import rewrite
 from cost_estimator import previous_cost_estimation
 
 """
-
 Another game using MCTS. based on a comment from 
 atanas1054 on Jun 27, 2017
 
@@ -42,14 +39,11 @@ Final (example) game state after each player makes 5 actions -> [5,97,3,5,1,32,5
 First 5 entries present the actions taken by Player1, second 5 entries present the actions taken by Player 2
 
 Finally, I apply a reward function to this vector [5,97,3,5,1,32,56,87,101,8]
-
 """
-
 
 if __name__ == "__main__":
 
     args = parse_cmd_args()
-
     db = Database(args)
 
     base_dir = os.path.abspath(os.curdir)
@@ -64,8 +58,11 @@ if __name__ == "__main__":
             sqls = [sql.value for sql in sqlparse.parse(sql_file.read()) if sql.get_type() == 'SELECT']
             for sql in sqls:
 
+                # s1: the origin cost (baseline) -- baseline
                 origin_cost = previous_cost_estimation(sql, db)
+                print(sql)
                 print("origin cost: "+str(origin_cost))
+                df
 
                 rewritten_sql = rewrite(sql, args, db, origin_cost, file) # mcts/topdown
                 rewritten_sql = str(rewritten_sql)

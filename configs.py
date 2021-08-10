@@ -2,6 +2,7 @@
 """
 desciption: system variables or other constant information
 """
+
 import os
 import requests
 import argparse
@@ -27,7 +28,7 @@ def parse_cmd_args():
 
 
     # mcts
-    parser.add_argument('--num_turns', action="store", type=int, default=5,
+    parser.add_argument('--num_turns', action="store", type=int, default=1,
                         help="Number of turns to run")
     parser.add_argument('--num_sims', action="store", type=int, default=10,
                         help="Number of simulations to run")

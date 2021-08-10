@@ -89,10 +89,10 @@ def UCTSEARCH(budget,root):
 		for c in front.children:
 			c.parent = front
 
-		reward = DEFAULTPOLICY(front) # estimation
+		reward = DEFAULTPOLICY(front) # estimation (simplified as the future cost reduction by default rewrite order)
 		# print("sub reward: " + str(reward))
 		if reward > front.reward:
-			BACKUP(front,reward)
+			BACKUP(front,reward) # backpropagation
 
 	best_node = root
 
@@ -126,8 +126,6 @@ def UCTSEARCH(budget,root):
 		random.choice(bestchildren)
 '''
 
-
-
 def TREEPOLICY(node):
 
 	while node.is_terminal()==False:
@@ -141,6 +139,7 @@ def BESTCHILD(node):
 	bestscore=node.children[0].reward
 	bestchildren=[node.children[0]]
 	for c in node.children:
+		# utility function
 		exploit=c.reward/c.visits
 		explore=math.sqrt(2.0*math.log(node.visits)/float(c.visits))
 		score=exploit+node.gamma*explore

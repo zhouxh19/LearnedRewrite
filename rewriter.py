@@ -195,11 +195,13 @@ def rewrite(sql, args, db, origin_cost, file):
 
     elif args.rewrite_policy == 'mcts':
 
+        # initialize the policy tree
         current_node = Node(sql, db, origin_cost, rewriter, args.gamma) # root
         best_node = current_node
 
         for l in range(args.num_turns):
-            best_node = UCTSEARCH(args.num_sims / (l + 1), best_node)
+
+            best_node = UCTSEARCH(args.num_sims / (l + 1), best_node) # select optimal rewritten query with mcts
             print("level %d" % l)
             #print("Num Children: %d" % len(best_node.children))
             #for i, c in enumerate(best_node.children):

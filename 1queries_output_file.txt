@@ -1,0 +1,279 @@
+['Aggregate', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[84.79999999999998, 130.13, 11.6, 12.67, 12.4]
+130.13
+['Aggregate', 'Sort', 'Seq Scan']
+[200.0000000000001, 25.0, 322.0]
+322.0
+['Nested Loop', 'Seq Scan', 'Materialize', 'Nested Loop', 'Seq Scan', 'Seq Scan']
+[9786586.82, 209214.2, 13733.02, 13732.23, 13719.02, 11.6]
+9786586.82
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[3714.6699999999837, 175723.32, 155292.66, 0.0, 459.5, 322.0, 0.0, 11.6]
+196614.58
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[3714.6699999999255, 175723.32, 155292.66, 0.0, 322.0]
+176170.32
+['Sort', 'Aggregate', 'Sort', 'Nested Loop', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan']
+[100127744.0, 5.186453146378957e+16, 1.0372906212656128e+16, 6.808131328398963e+16, 302959473023.15, 155292.66, 1052625.35, 927817.57, 15503.24, 13144.16]
+1.3695850769469808e+17
+['Sort', 'Seq Scan']
+[662.0400000000009, 13144.16]
+13144.16
+['Merge Join', 'Sort', 'Seq Scan', 'Sort', 'Seq Scan']
+[22.139999999897555, 0.3699999999953434, 159007.33, 10.400000000023283, 954179.46]
+1113464.24
+['Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[315118.23, 209214.2, 0.0, 13168.62]
+333834.87
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[6455942664.69, 13144.16, 168526.99, 155292.66]
+6455942664.69
+['Seq Scan']
+[233123.3]
+233123.3
+['Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[22493027.16, 155292.66, 0.0, 1308972.76, 927817.57, 0.0, 209214.2]
+24303856.34
+['Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[126057824794.34766, 827255788961.07, 927817.57, 251802.3, 209214.2]
+1516640367350.07
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[827255788961.07, 927817.57, 251802.3, 209214.2]
+827255788961.07
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[827258234985.41, 209214.2, 1021732.36, 927817.57]
+827258234985.41
+['Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Nested Loop', 'Seq Scan', 'Seq Scan']
+[88064.80000000075, 674674.97, 13168.62, 221182.75, 221181.95, 221168.75, 11.6]
+674674.97
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[17272328520.87, 13168.62, 251802.3, 209214.2]
+17272328520.87
+['Sort', 'Seq Scan']
+[0.0, 397.0]
+397.0
+['Hash Join', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan', 'Hash', 'Seq Scan']
+[167256.18, 163555.83, 155292.66, 0.0, 14468.24, 0.0, 322.0]
+182770.96
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[806135582470.56, 221168.75, 1021732.36, 927817.57]
+806135582470.56
+['Aggregate', 'Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[27299.699999999953, 3714.6699999999837, 188627.32, 155292.66, 0.0, 13144.16]
+411393.98
+['Sort', 'Nested Loop', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan', 'Materialize', 'Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Nested Loop', 'Seq Scan', 'Seq Scan']
+[5219.089999999851, 1171443.9200000002, 161444.13999999998, 155292.66, 0.0, 347.0, 983922.8099999998, 983922.6299999999, 954179.46, 0.0, 227146.24000000002, 209214.2, 0.0, 13731.03, 12.0, 13719.02]
+1412673.36
+['Aggregate', 'Sort', 'Seq Scan']
+[4952.0, 550.4100000000035, 13168.62]
+13168.62
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[453504.62, 13168.62, 12.4, 11.6]
+453504.62
+['Sort', 'Seq Scan']
+[662.0400000000009, 13144.16]
+13144.16
+['Sort', 'Aggregate', 'Sort', 'Hash Join', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan', 'Hash', 'Seq Scan']
+[3714.670000000042, 40861.32000000001, 3714.6699999999837, 209315.97999999998, 188885.32, 155292.66, 0.0, 13144.16, 0.0, 322.0]
+299373.33
+['Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[22462135.16, 155292.66, 0.0, 1251858.7599999998, 927817.57, 0.0, 322738.23, 209214.2, 0.0, 13168.62]
+24320149.01
+['Seq Scan']
+[11.6]
+11.6
+['Seq Scan']
+[12.4]
+12.4
+['Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[1325.0, 6959.13, 322.0, 12.27, 12.0]
+6959.13
+['Sort', 'Nested Loop', 'Nested Loop', 'Nested Loop', 'Seq Scan', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan']
+[157392436262.40625, 793418127008.84, 6455945684.85, 16164.32, 372.0, 13144.16, 168526.99, 155292.66, 12.4, 11.6]
+799950617532.72
+['Sort', 'Seq Scan']
+[0.3999999999999986, 11.6]
+11.6
+['Sort', 'Seq Scan']
+[0.3999999999999986, 11.6]
+11.6
+['Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[13995.83, 13168.62, 0.0, 11.6]
+14009.43
+['Aggregate', 'Sort', 'Seq Scan']
+[1.1900000000000013, 0.13000000000000078, 12.0]
+12.0
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[343.6, 11.6, 12.4, 11.6]
+343.6
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[8.280000000000086, 392.61999999999995, 322.0, 0.0, 12.0]
+405.28
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[26361.900000000373, 1226592.76, 927817.57, 0.0, 209214.2]
+2036322.71
+['Aggregate', 'Sort', 'Nested Loop', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan']
+[35661282650.0, 5943464000.0, 29720447383.66, 3127036.66, 155292.66, 12.4, 11.6, 372.0, 322.0]
+29720447383.66
+['Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[25520050.0, 127759604.33, 159007.33, 372.0, 322.0]
+127759604.33
+['Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[188627.32, 155292.66, 0.0, 13144.16]
+206375.68
+['Seq Scan']
+[11.6]
+11.6
+['Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[7310907.720000029, 36726717.69, 13144.16, 159062.54, 159007.33]
+36726717.69
+['Hash Join', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan', 'Hash', 'Seq Scan']
+[211700.97999999998, 191270.32, 155292.66, 0.0, 13144.16, 0.0, 322.0]
+229637.34
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[11954.550000000047, 325137.77999999997, 221168.75, 0.0, 13168.62]
+482993.42
+['Seq Scan']
+[14269.43]
+14269.43
+['Sort', 'Aggregate', 'Sort', 'Seq Scan']
+[424.9799999999814, 16983.51999999996, 3714.6599999999744, 155292.66]
+155292.66
+['Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[64.0, 343.6, 11.6, 12.4, 11.6]
+343.6
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[11954.550000000047, 322738.23, 209214.2, 0.0, 13168.62]
+471038.87
+['Merge Join', 'Index Scan', 'Materialize', 'Sort', 'Seq Scan']
+[117181.19000000006, 32948.93, 23909.099999999977, 11954.54999999993, 209214.2]
+471038.87
+['Seq Scan']
+[13806.2]
+13806.2
+['Sort', 'Hash Join', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan', 'Hash', 'Seq Scan']
+[3714.670000000042, 212217.97999999998, 191787.32, 155292.66, 0.0, 13144.16, 0.0, 322.0]
+299373.33
+['Aggregate', 'Sort', 'Nested Loop', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan']
+[2526660571940.0, 421110021936.0, 2122827167830.73, 17277058138.72, 209214.2, 15130.43, 13168.62, 12.4, 11.6]
+2137215969286.87
+['Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[185399.07, 155292.66, 0.0, 13806.2]
+202888.98
+['Seq Scan']
+[13806.2]
+13806.2
+['Aggregate', 'Sort', 'Nested Loop', 'Nested Loop', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan']
+[2.8866215919036302e+23, 4.123745131290808e+22, 2.7062165079005366e+23, 2.719248734866363e+16, 18305149438.72, 209214.2, 15345.43, 13168.62, 169977.99, 155292.66, 1021732.36, 927817.57]
+1.6601676457177554e+25
+['Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[983702726.6399994, 6455942664.69, 13144.16, 168526.99, 155292.66]
+12988420978.06
+['Seq Scan']
+[954179.46]
+954179.46
+['Nested Loop', 'Seq Scan', 'Materialize', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[1.2291894324066068e+18, 927817.57, 179849362960.06, 116569176381.46, 155292.66, 263756.85, 221168.75]
+1.2291894324066068e+18
+['Aggregate', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[100.0, 459.5, 322.0, 0.0, 11.6]
+473.1
+['Seq Scan']
+[954179.46]
+954179.46
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[0.3999999999996362, 13995.83, 13168.62, 0.0, 11.6]
+14009.43
+['Nested Loop', 'Seq Scan', 'Materialize', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[165353.55, 322.0, 164281.56, 164281.54, 159007.33, 0.0, 14468.24]
+179821.8
+['Aggregate', 'Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[576.0, 64.0, 343.6, 11.6, 12.4, 11.6]
+343.6
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[8.690000000002328, 227180.77000000002, 209214.2, 0.0, 13995.83, 13168.62, 0.0, 11.6]
+241192.2
+['Sort', 'Seq Scan']
+[14592.070000000065, 954179.46]
+954179.46
+['Sort', 'Aggregate', 'Nested Loop', 'Seq Scan', 'Seq Scan']
+[0.010000000009313226, 0.010000000009313226, 271301.83, 14269.43, 209214.2]
+271301.83
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[453504.62, 13168.62, 12.4, 11.6]
+453504.62
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[129.73, 11.6, 12.27, 12.0]
+129.73
+['Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[22506227.16, 155292.66, 0.0, 1318312.76, 927817.57, 0.0, 209214.2]
+24346034.34
+['Nested Loop', 'Nested Loop', 'Seq Scan', 'Seq Scan', 'Materialize', 'Seq Scan']
+[17278060136.39, 1211211.86, 954179.46, 209214.2, 15130.43, 13168.62]
+17278060136.39
+['Aggregate', 'Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[504231366193.35156, 126057824794.35156, 876499816105.62, 927817.57, 268426.85, 221168.75]
+1516640379304.62
+['Aggregate', 'Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[7856034104.159973, 983702726.6400146, 7224746764.06, 155292.66, 16020.24, 13144.16]
+12988420978.06
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Nested Loop', 'Seq Scan', 'Seq Scan']
+[0.3700000001117587, 160866.15000000014, 155292.66, 0.0, 954626.46, 954179.46, 322.0]
+1115492.62
+['Aggregate', 'Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[512.0, 64.0, 343.6, 11.6, 12.4, 11.6]
+343.6
+['Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[1240602.76, 927817.57, 0.0, 209214.2]
+1542278.71
+['Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[175723.32, 155292.66, 0.0, 322.0]
+176170.32
+['Seq Scan']
+[322.0]
+322.0
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[17272328520.87, 13168.62, 251802.3, 209214.2]
+17272328520.87
+['Sort', 'Seq Scan']
+[26361.889999999665, 927817.57]
+927817.57
+['Sort', 'Seq Scan']
+[26361.889999999665, 927817.57]
+927817.57
+['Aggregate', 'Sort', 'Seq Scan']
+[3830.8699999999953, 662.0400000000009, 13144.16]
+47166.34
+['Aggregate', 'Sort', 'Hash Join', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[43206639.02000004, 3927876.2700000405, 22517115.82, 194172.32, 155292.66, 0.0, 13144.16, 0.0, 1267782.76, 927817.57, 0.0, 209214.2]
+25580087.36
+['Nested Loop', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan']
+[61332525.03, 394593.03, 13719.02, 12.4, 11.6, 12.4, 11.6]
+61332525.03
+['Sort', 'Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[43860.830000000075, 1208708.48, 927817.57, 0.0, 161030.58, 155292.66, 0.0, 14468.24]
+1859569.66
+['Sort', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[983659621.8499756, 6839684685.81, 159007.33, 16423.23, 13806.2]
+12988160951.82
+['Sort', 'Seq Scan']
+[0.3999999999999986, 11.6]
+11.6
+['Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[13995.83, 13168.62, 0.0, 11.6]
+14009.43
+['Aggregate', 'Sort', 'Hash Join', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan', 'Hash', 'Seq Scan']
+[43206639.02999997, 3927876.2799999714, 22587258.82, 235576.32, 155292.66, 0.0, 13144.16, 0.0, 927817.57]
+800952930.72
+['Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan']
+[353111.43, 14269.43, 12.4, 11.6]
+353111.43
+['Aggregate', 'Sort', 'Nested Loop', 'Nested Loop', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan']
+[6688593280000.0, 950954240000.0, 4755249804515.66, 478604168.66, 3127036.66, 155292.66, 12.4, 11.6, 12.4, 11.6, 372.0, 322.0]
+4755249804515.66
+['Hash Join', 'Seq Scan', 'Hash', 'Hash Join', 'Seq Scan', 'Hash', 'Seq Scan']
+[446.0, 347.0, 0.0, 13.799999999999999, 11.6, 0.0, 11.6]
+475.4
+['Nested Loop', 'Nested Loop', 'Seq Scan', 'Materialize', 'Seq Scan', 'Materialize', 'Seq Scan']
+[70905356.62, 453504.62, 13168.62, 12.4, 11.6, 12.4, 11.6]
+70905356.62

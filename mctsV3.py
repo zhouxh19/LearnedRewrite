@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import random
 import math
+import time
 import hashlib
 import logging
 import argparse
@@ -75,7 +76,6 @@ class Node():
 		for i in range(len(self.rewriter.rulelist)):
 			# print("success rewrite")
 			is_rewritten, csql = self.rewriter.single_rewrite(self.state, i)
-
 			if is_rewritten == 1 and previous_cost_estimation(csql, self.db)<self.origin_cost:
 
 				self.add_child(csql, self.db, self.origin_cost, self.rewriter, i)
@@ -88,13 +88,16 @@ def UCTSEARCH(budget,root, parallel_num):
 		c.parent = root
 
 	for iter in range(int(budget)):
+		# print(str(iter) + ".....\n")
 		# if iter%20==19:
 		# 	logger.info("simulation: %d"%iter)
 		# 	logger.info(root)
 		if parallel_num == 1 or parallel_num > root.node_num: # select single node
+			# print("Parallel_num 1 ...\n")
 			front = TREEPOLICY(root) # node selection
 			front_list = [front]
 		else:
+			# print("Parallel_num 0 ...\n")
 			front_list = parallel_node_selection(root,parallel_num)
 
 		for front in front_list:

@@ -87,11 +87,12 @@ class Database():
             return 0, ''
         elif fail == 0:
             return 1, res
-
+    def return_cursor(self):
+        return self.conn.cursor()
     # query cost estimated by the optimizer
     def cost_estimation(self, sql):
         success, res = self.execute_sql(sql)
-
+        print(success, res)
         if success == 1:
             cost = res[0][0][0]['Plan']['Total Cost']
 

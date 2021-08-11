@@ -149,7 +149,7 @@ class Rewriter():
         # print(' formatted sql '.center(60, '-'))
         format_sql = self.parse_quote(sql)
         # print(format_sql)
-
+        
         is_rewritten,ra = self.SQL2RA(format_sql, ruleid)
         if is_rewritten == 1: # the rule can be applied
             # print(' rewritten sql '.center(60, '-'))
@@ -187,26 +187,26 @@ class Rewriter():
         return False
 '''
 
-def rewrite(args, db, origin_cost):
+def rewrite(args, db, origin_cost, sql):
 
     rewriter = Rewriter(args, db)
 
     rewrite_sequence = []
-    sql = args.sql
+    # sql = args.sql
 
     if args.rewrite_policy == 'topdown': # -1
         is_rewritten, sql = rewriter.single_rewrite(sql, -1)
 
     elif args.rewrite_policy == 'mcts':
-
+        # print("mcts ... \n")
         # initialize the policy tree
         current_node = Node(sql, db, origin_cost, rewriter, args.gamma) # root
         best_node = current_node
 
         for l in range(args.num_turns):
-
+            # print(str(l) + ".... \n")
             best_node = UCTSEARCH(args.num_sims / (l + 1), best_node, args.parallel_num) # select optimal rewritten query with mcts
-            print("level %d" % l)
+            # print("level %d" % l)
             #print("Num Children: %d" % len(best_node.children))
             #for i, c in enumerate(best_node.children):
             #    print(i, c)

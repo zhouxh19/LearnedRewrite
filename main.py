@@ -5,6 +5,7 @@ import math
 import hashlib
 import logging
 import argparse
+import json
 
 import sys
 import os
@@ -18,11 +19,23 @@ import jpype.imports
 from mcts import *
 from configs import parse_cmd_args
 from database import Database, RewriteState
-from rewriter import rewrite
-from configs import parse_cmd_args
-from database import Database, RewriteState
 from rewriterV3 import rewrite
 from cost_estimator import previous_cost_estimation
+
+def analyse_part(json_sql, list_node, list_cost):
+    for i in json_sql.keys():
+        if i == "Node Type":
+            list_node.append(json_sql[i])
+        elif i == "Total Cost":
+            list_cost.append(json_sql[i] - json_sql['Startup Cost'])
+        elif i == "Plans":
+            for u in json_sql[i]:
+                analyse_part(u, list_node, list_cost)
+
+def analyse(json_sql, list_node, list_cost):
+    for i in json_sql.keys():
+        if i == 'Plan':
+            analyse_part(json_sql[i], list_node, list_cost)
 
 """
 Another game using MCTS. based on a comment from 
@@ -54,18 +67,56 @@ def rewrite_sql():
 
     rewrite_dir = os.path.join(base_dir, 'queries', 'input_sql')
 
-    sql = args.sql
-    # s1: the origin cost (baseline) -- baseline
-    # print(sql)
-    origin_cost = previous_cost_estimation(sql, db)
-    # print("origin cost: "+str(origin_cost))
+    sql_list = []
+    #with open("./database_gen_queries/1_queries.log", "r") as sql_file:
+    #    tmp_sql = ""
+    #    c = sql_file.readline()
+    #    while c != "":
+    #        while len(c) <= 1 or c[-2] != ';':
+    #            tmp_sql += c[:-1] + " "
+    #            c = sql_file.readline()
+    #            # print(c)
+    #        tmp_sql += c[:-1] + " "
+    #        sql_list.append(tmp_sql)
+    #        tmp_sql = ""
+    #        c = sql_file.readline()
+    with open("./lixi_new_sqls.log",'r') as sql_file:
+        for _ in sql_file:
+            sql_list.append(_[:-1])
+    for cnt, sql in enumerate(sql_list):  
+        try:
+            # print(str(cnt) + ".....\n" + str(sql))
+            # sql = sql
+            newsql = list(sql)
+            # sql1 = sql
+            # s1: the origin cost (baseline) -- baseline
+            # origin_cost = previous_cost_estimation(sql, db)
+            # print("origin cost: "+str(origin_cost))
 
-    rewritten_sql = rewrite(args, db, origin_cost) # mcts/topdown
+            # rewritten_sql = rewrite(args, db, origin_cost, sql1) # mcts/topdown
 
-    rewritten_cost = previous_cost_estimation(rewritten_sql, db)
-    print("after-rewrite cost: "+str(rewritten_cost))
+            cur = db.return_cursor()
+            cur.execute('explain (FORMAT JSON) '+ sql)
+            res = cur.fetchall()
+            r = res[0][0][0]
 
-    print("-------")
+            with open("f.json",'w') as out_file:
+                out_file.write( json.dumps(str(res[0][0][0])) )
+
+            list_node = []
+            list_cost = []
+            analyse(res[0][0][0], list_node, list_cost)
+            # rewritten_cost = previous_cost_estimation(rewritten_sql, db)
+            with open("2queries_output_file.txt", "a+") as list_out:
+                list_out.write(str(list_node) + "\n")
+                list_out.write(str(list_cost) + "\n")
+                list_out.write(str(res[0][0][0]["Plan"]["Cost"]) + "\n")
+            
+            print("after-rewrite cost: "+str(rewritten_cost))
+
+            print("-------")
+        except:
+            pass
 
 
 if __name__ == "__main__":

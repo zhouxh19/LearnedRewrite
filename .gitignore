@@ -1,5 +1,4 @@
 database_gen_queries/*
-network/__pycache__/*
 __pycache__/*
 .idea/*
 model/*

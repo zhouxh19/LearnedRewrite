@@ -26,7 +26,7 @@ d = 25
 n = 200
 x_list = []
 y_list = []
-with open("./2queries_output_file.txt","r") as f:
+with open("./2.txt","r") as f:
     for cnt, line in enumerate(f):
         if cnt % 3 == 1:
             x_list.append(eval(line[:-1]))

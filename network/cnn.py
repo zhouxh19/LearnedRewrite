@@ -28,7 +28,7 @@ d = 25
 n = 200
 x_list = []
 y_list = []
-with open("./2queries_output_file.txt","r") as f:
+with open("../2.txt","r") as f:
     for cnt, line in enumerate(f):
         if cnt % 3 == 1:
             x_list.append(eval(line[:-1]))
@@ -103,7 +103,7 @@ for i in range(epochs):
         # y_hat
         # print(y_hat.size())
         # print(y.float)
-        y_hat = y_hat.reshape(16)
+        y_hat = y_hat.reshape(4)
         loss = loss_func(y_hat, y.float())
         # ipdb.set_trace()
         optim.zero_grad()

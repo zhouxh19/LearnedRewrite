@@ -82,12 +82,12 @@ class MLP(nn.Module):
         return model
         
 def solve():
-    X_all, y_all, total = read_file("../2.txt")
+    X_all, y_all, total = read_file("../input_length.txt")
 
     X_all = Variable(X_all)
     y_all = Variable(y_all)
 
-    model = MLP(layers = 11, input_dim = X_all.shape[1], hidden_dim = 256 * 3)
+    model = MLP(layers = 14, input_dim = X_all.shape[1], hidden_dim = 256 * 3)
     # model.cuda(0)
     optimizer = torch.optim.Adam(model.parameters(), lr = 0.00005)
 
@@ -123,8 +123,8 @@ def solve():
 
 def predict(filename, model):
     X_all, y_all, total = read_file(filename)
-    X_all = Variable(X_all).cuda()
-    y_all = Variable(y_all).cuda()
+    X_all = Variable(X_all)
+    y_all = Variable(y_all)
 
     predict_y = model(X_all)
     predDF = pd.DataFrame(
@@ -133,4 +133,4 @@ def predict(filename, model):
     predDF.to_csv('result.csv', index = False)
 
 model = solve()
-predict("./2queries_output_file.txt", model)
+predict("../2.txt", model)

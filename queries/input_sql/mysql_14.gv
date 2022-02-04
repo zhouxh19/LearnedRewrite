@@ -1,5 +1,0 @@
-digraph G {
-	node1 [label="reward:347.9399999999441"]
-	node2 [label="reward:347.9399999999441" color=red]
-	node1 -> node2
-}

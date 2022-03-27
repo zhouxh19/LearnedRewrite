@@ -7,6 +7,7 @@ To address challenges in classic query rewrite strategies (e.g., topdown rewrite
 
 http://rewrite_demo.dbmind.cn/
 
+Co-Contributors: Jiesi Liu, Jianming Wu, Xinning Zhang
 
 ## Before you run
 

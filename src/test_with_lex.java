@@ -1,4 +1,8 @@
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import main.GenerateSchema;
 import org.apache.calcite.adapter.jdbc.JdbcSchema;
+import org.apache.calcite.config.Lex;
 import org.apache.calcite.jdbc.CalciteConnection;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.RelNode;
@@ -24,16 +28,11 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.apache.calcite.avatica.util.Casing.UNCHANGED;
+import static org.apache.calcite.avatica.util.Quoting.DOUBLE_QUOTE;
+
 public class test_with_lex {
     public static void main(String[] args) throws Exception {
-
-        String host = "123.56.63.105";
-        String port = "5432";
-        String user = "tpch";
-        String passwd= "hello_tpch";
-        String dbname = "tpch";
-        String dbDriver = "org.postgresql.Driver";
-
 
         String testSql = "select * from (select row_.*, aol_rownum as total_rownum from (select distinct (aol.ol_id) olId, aol.ol_nbr olNbr, aol.so_date soDate, aol.rownum as aol_rownum, (select c.region_name from tab1 c where c.common_region_id = aol.order_region_id) regionName, (select c.region_name from tab1 c where c.common_region_id = aol.so_lan_id) areaName, (select cc.name from tab2 cc where cc.channel_id = aol.channel_id and rownum < 2) channelName, (select '|' || sn1.name from tab3 as sn1 where sn1.staff_id = aol.staff_id and rownum < 2) staffName, (select t.service_name from tab4 t where t.service_kind = aol.service_type) serviceName, (select so.remark from tab5 so where so.service_offer_id = aol.action_type_name) remark, aol.access_number accessNumber from tab6 aol where aol.order_region_id < 10000 and aol.so_date >= '2022-01-01 00:00:00' and aol.so_date <= '2022-01-04 00:00:00' and not exists (select orl.ol_id from ol_rule_list orl where orl.ol_id = aol.ol_id)) row_ where aol_rownum <= 40000) as table_alias where table_alias.total_rownum >= 0";
         testSql = "select\n"
@@ -57,32 +56,21 @@ public class test_with_lex {
                 + "    o_orderpriority\n"
                 + "order by\n"
                 + "    o_orderpriority";
-        DBConn db = new DBConn(host,port,user,passwd,dbname,dbDriver);
-        Rewriter rewriter = new Rewriter(host,port,dbDriver,user,passwd,dbname,db);
-
-        String formatted = new Utils().sqlFormattingToCalcite(testSql,rewriter.db.dbname, rewriter.tableList);
-
 
         //Parse
-        SqlParser.Config config = SqlParser.configBuilder().build();
-        SqlNode t = SqlParser.create(testSql,config).parseStmt();
+        SqlParser.Config parserConfig = SqlParser.config().withLex(Lex.MYSQL).withUnquotedCasing(UNCHANGED).withCaseSensitive(false).withQuoting(DOUBLE_QUOTE);
+        SqlNode t = SqlParser.create(testSql, parserConfig).parseStmt();
 
         //validate
-        Connection conn = DriverManager.getConnection("jdbc:calcite:");
-        CalciteConnection calcite_conn = conn.unwrap(CalciteConnection.class);
-        SchemaPlus rootSchema = calcite_conn.getRootSchema();
-        DataSource data_source = JdbcSchema.dataSource("jdbc:postgresql://"+host+':'+port+'/',
-                dbDriver, user,passwd);
-        rootSchema.add(dbname, JdbcSchema.create(rootSchema,dbname, data_source, null, null));
-        FrameworkConfig planner_config = Frameworks.newConfigBuilder().defaultSchema(rootSchema).parserConfig(config).build();
-
+        String path = System.getProperty("user.dir");
+        JSONArray jobj = Utils.readJsonFile(path+"/src/main/schema.json");
+        SchemaPlus rootSchema = GenerateSchema.generate_schema(jobj);
+        FrameworkConfig planner_config = Frameworks.newConfigBuilder().defaultSchema(rootSchema).parserConfig(parserConfig).build();
         Planner planner = Frameworks.getPlanner(planner_config);
-
-        System.out.println(rootSchema.getTableNames());
 
         planner.close();
         planner.reset();
-        SqlNode sql_node = planner.parse(new SourceStringReader(formatted));
+        SqlNode sql_node = planner.parse(new SourceStringReader(testSql));
         System.out.println("--------parsed--------");
         System.out.println(sql_node);
         sql_node = planner.validate(sql_node);

@@ -41,7 +41,7 @@ public class DBConn {
     try {
       Statement stmt = this.conn.createStatement();
       boolean success = stmt.execute("SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg%' AND tablename NOT LIKE 'sql_%' ORDER BY tablename;");
-      System.out.println("getTableName success:" + success);
+//      System.out.println("getTableName success:" + success);
       if (success){
         ResultSet res = stmt.getResultSet();
         while(res.next()){
@@ -66,7 +66,7 @@ public class DBConn {
     try {
       Statement stmt = this.conn.createStatement();
       System.out.println("getting cost for sql:");
-      System.out.println(sql);
+//      System.out.println(sql);
       boolean success = stmt.execute("explain (FORMAT JSON)" + sql);
       if (success){
         ResultSet res = stmt.getResultSet();

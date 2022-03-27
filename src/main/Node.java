@@ -17,44 +17,43 @@ import java.util.*;
 public class Node {
   int visits = 1;
   public String state;
-  RelNode state_rel;
+  public RelNode state_rel;
   public float reward;
   Rewriter rewriter;
   public List children = new ArrayList();
   Node parent;
   List rewrite_sequence = new ArrayList();
   int node_num = 1;
-  int used_rule_num = 0;
-  int non_computed = 0;
-  List selected_nodes = new ArrayList();
-  List selected_nodes_utilities = new ArrayList();
-  DBConn db;
+
   public float origin_cost;
   float gamma;
   int selected = 0;
-  int ruleid = -1;
+  Map activatedRules = new HashMap();
+  String name= "";
+
 
   public Node(String sql,
               RelNode state_rel,
-              DBConn db,
               float origin_cost,
               Rewriter rewriter,
               float gamma,
-              Node parent) throws SQLException {
+              Node parent,
+              String name
+              ) throws Exception {
     this.state = sql;
     this.state_rel = state_rel;
-    this.reward = origin_cost - db.getCost(sql);
+    this.reward = (float) (origin_cost - rewriter.getCostRecordFromRelNode(state_rel));
     this.rewriter = rewriter;
     this.parent = parent;
-    this.db = db;
     this.origin_cost = origin_cost;
     this.gamma = gamma;
+    this.name = name;
+
   }
-  public void add_child(String csql,RelNode relNode,DBConn db,float origin_cost,Rewriter rewriter,int ruleid)
-          throws SQLException {
-    Node child = new Node(csql,relNode,db,origin_cost,rewriter,this.gamma,parent);
-    child.ruleid = ruleid;
-    child.rewrite_sequence.add(ruleid);
+  public void add_child(String csql,RelNode relNode,float origin_cost,Rewriter rewriter,Map activatedRules,String name)
+          throws Exception {
+    Node child = new Node(csql,relNode,origin_cost,rewriter,this.gamma,parent,name);
+    child.activatedRules = activatedRules;
     this.children.add(child);
 
   }
@@ -71,26 +70,25 @@ public class Node {
     }
     return false;
   }
-  public void node_children() throws ValidationException, SqlParseException, RelConversionException, SQLException {
+  public void node_children() throws Exception {
     //todo rule selection
 
     for(String rule: this.rewriter.rule2class.keySet()) {
       if (rule_check(this.state_rel, rewriter.rule2class.get(rule))){
-        System.out.println(rule+ " is selected ");
-        List res = this.rewriter.singleRewrite(this.state, rule);
-        int is_rewritten = (int) res.get(2);
+
+        System.out.println("\u001B[35m" + rule+ " Module is selected " + "\u001B[0m");
+        List res = this.rewriter.singleRewrite(this.state_rel, rule);
+        Map activatedRules = (Map) res.get(2);
         String csql = (String) res.get(1);
-        csql = new Utils().sqlFormattingFromCalcite(csql, this.db.dbname);
-        float new_cost = this.db.getCost(csql);
-        System.out.println("cost:"+new_cost);
+        double new_cost = this.rewriter.getCostRecordFromRelNode((RelNode) res.get(0));
         if (new_cost == -1){
           return;
         }
-        if (is_rewritten ==1 && new_cost<=this.origin_cost){
+        if (activatedRules.size()>0 && new_cost<=this.origin_cost){
           //todo rule selection
           //self.used_rule_num = self.used_rule_num + self.rewriter.rulenums[self.rewriter.related_rule_list[i]]
-          System.out.println("cost:"+new_cost);
-          this.add_child(csql, (RelNode) res.get(0),db,this.origin_cost,this.rewriter,1);
+          System.out.println("new node added..");
+          this.add_child(csql, (RelNode) res.get(0),this.origin_cost,this.rewriter,activatedRules,rule);
         }
       }
     }
@@ -104,9 +102,8 @@ public class Node {
     return true;
   }
 
-
   public Node UTCSEARCH(int buget,Node root,int parallel_num)
-          throws ValidationException, SqlParseException, SQLException, RelConversionException {
+          throws Exception {
     root.selected = 1;
     int is_rewritten = 0;
     root.node_children();
@@ -172,7 +169,6 @@ public class Node {
       else if (score == bestscore){
         bestchildren.add(c);
       }
-
     }
     Random random = new Random();
     int i = random.nextInt(bestchildren.size());

@@ -1,60 +1,151 @@
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import java.net.InetSocketAddress;
+
+import main.Node;
+import main.Utils;
+import org.apache.calcite.plan.RelOptUtil;
+import org.apache.calcite.rel.RelNode;
 import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+
+import main.Rewriter;
 
 
 public class server {
     public static void main(String[] arg) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8001), 0);
-        server.createContext("/rewrite", new PostHandler());
+        HttpServer server = HttpServer.create(new InetSocketAddress(6336), 0);
+        server.createContext("/rewrite", new RequestHandler());
+        server.createContext("/test", new GetHandler());
+        server.createContext("/parser", new ParserHandler());
         server.start();
     }
 
-    static class PostHandler implements HttpHandler{
-        public void handle(HttpExchange exchange) {
-            String response = "";
+    static class GetHandler implements HttpHandler{
+        public void handle(HttpExchange exchange) throws IOException {
             try{
                 //获得表单提交数据(post)
                 String postString = IOUtils.toString(exchange.getRequestBody());
-                Map<String,String> postInfo = formData2Dic(postString);
+                System.out.println("postString：" + postString);
+                JSONObject postInfo = JSONObject.parseObject(postString);
                 System.out.println("请求参数：" + postInfo);
-                exchange.sendResponseHeaders(200,0);
-                OutputStream os = exchange.getResponseBody();
-                os.write(response.getBytes());
-                os.close();
-            }catch (IOException ie) {
-
+                String sql = postInfo.getString("sql");
+                System.out.println("sql：" + sql);
             } catch (Exception e) {
-
+                System.out.println("处理失败");
+            } finally {
+                OutputStream os = exchange.getResponseBody();
+                exchange.sendResponseHeaders(200,0);
+                os.write("success".getBytes());
+                os.close();
             }
         }
     }
 
-    public static Map<String,String> formData2Dic(String formData ) {
-        Map<String,String> result = new HashMap<>();
-        if(formData== null || formData.trim().length() == 0) {
-            return result;
-        }
-        final String[] items = formData.split("&");
-        Arrays.stream(items).forEach(item ->{
-            final String[] keyAndVal = item.split("=");
-            if( keyAndVal.length == 2) {
-                try{
-                    final String key = URLDecoder.decode( keyAndVal[0],"utf8");
-                    final String val = URLDecoder.decode( keyAndVal[1],"utf8");
-                    result.put(key,val);
-                }catch (UnsupportedEncodingException e) {}
+    static class RequestHandler implements HttpHandler{
+        public void handle(HttpExchange exchange) throws IOException {
+            JSONObject responseJson = new JSONObject();
+            try{
+                //获得表单提交数据(post)
+                String postString = IOUtils.toString(exchange.getRequestBody());
+                JSONObject postInfo = JSONObject.parseObject(postString);
+                String sql = postInfo.getString("sql");
+                String schemaJson = postInfo.getString("schema");
+
+                System.out.println("请求sql：" + sql);
+                if (sql == null) {
+                    responseJson.put("status", false);
+                    responseJson.put("message", "Please enter Sql");
+                }else {
+                    sql = sql.replace(";", "");
+                    //DB Config
+                    JSONArray jobj;
+                    if (schemaJson == null) {
+                        String path = System.getProperty("user.dir");
+                        jobj = Utils.readJsonFile(path+"/src/main/schema.json");
+                    }else {
+                        jobj = JSON.parseArray(schemaJson);
+                    }
+                    Rewriter rewriter = new Rewriter(jobj);
+                    RelNode relNode = rewriter.SQL2RA(sql);
+                    double origin_cost = rewriter.getCostRecordFromRelNode(relNode);
+                    Node resultNode = new Node(sql, relNode, (float) origin_cost,rewriter, (float) 0.1,null,"original query");
+                    Node res = resultNode.UTCSEARCH(20, resultNode,1);
+                    JSONObject dataJson = new JSONObject();
+                    JSONObject treeJson = Utils.generate_json(resultNode);
+                    dataJson.put("origin_cost", String.format("%.4f",origin_cost));
+                    dataJson.put("origin_sql", sql);
+                    dataJson.put("origin_sql_node", RelOptUtil.toString(relNode));
+                    dataJson.put("rewritten_cost", String.format("%.4f",rewriter.getCostRecordFromRelNode(res.state_rel)));
+                    dataJson.put("rewritten_sql", res.state);
+                    RelNode rewrittenRelNode = rewriter.SQL2RA(res.state);
+                    dataJson.put("rewritten_sql_node", RelOptUtil.toString(rewrittenRelNode));
+                    dataJson.put("is_rewritten", !res.state.equalsIgnoreCase(sql));
+                    dataJson.put("treeJson", treeJson);
+                    responseJson.put("status", true);
+                    responseJson.put("message", "SUCCESS");
+                    responseJson.put("data", dataJson);
+                }
+            } catch (Exception e) {
+                responseJson.put("status", false);
+                responseJson.put("message", "Get Error");
+            } finally {
+                OutputStream os = exchange.getResponseBody();
+                exchange.sendResponseHeaders(200,0);
+                os.write(responseJson.toJSONString().getBytes());
+                os.close();
             }
-        });
-        return result;
+        }
     }
+
+    static class ParserHandler implements HttpHandler{
+        public void handle(HttpExchange exchange) throws IOException {
+            JSONObject responseJson = new JSONObject();
+            try{
+                //获得表单提交数据(post)
+                String postString = IOUtils.toString(exchange.getRequestBody());
+                JSONObject postInfo = JSONObject.parseObject(postString);
+                String sql = postInfo.getString("sql");
+                String schemaJson = postInfo.getString("schema");
+
+                System.out.println("请求sql：" + sql);
+                if (sql == null) {
+                    responseJson.put("status", false);
+                    responseJson.put("message", "Please enter Sql");
+                }else {
+                    sql = sql.replace(";", "");
+                    //DB Config
+                    JSONArray jobj;
+                    if (schemaJson == null) {
+                        String path = System.getProperty("user.dir");
+                        jobj = Utils.readJsonFile(path+"/src/main/schema.json");
+                    }else {
+                        jobj = JSON.parseArray(schemaJson);
+                    }
+                    Rewriter rewriter = new Rewriter(jobj);
+                    RelNode relNode = rewriter.SQL2RA(sql);
+                    JSONObject dataJson = new JSONObject();
+                    dataJson.put("res_node", RelOptUtil.toString(relNode));
+                    responseJson.put("status", true);
+                    responseJson.put("message", "SUCCESS");
+                    responseJson.put("data", dataJson);
+                }
+            } catch (Exception e) {
+                responseJson.put("status", false);
+                responseJson.put("message", "Get Error");
+            } finally {
+                OutputStream os = exchange.getResponseBody();
+                exchange.sendResponseHeaders(200,0);
+                os.write(responseJson.toJSONString().getBytes());
+                os.close();
+            }
+        }
+    }
+
 }

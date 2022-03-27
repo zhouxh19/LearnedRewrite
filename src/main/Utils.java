@@ -1,121 +1,56 @@
 package main;
+import com.alibaba.fastjson.JSONArray;
+import org.apache.calcite.plan.RelOptRule;
+import org.apache.calcite.plan.RelOptUtil;
 
-import net.sf.jsqlparser.JSQLParserException;
-import net.sf.jsqlparser.parser.CCJSqlParserUtil;
-import net.sf.jsqlparser.schema.Column;
-import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
-import net.sf.jsqlparser.util.deparser.SelectDeParser;
-import net.sf.jsqlparser.util.deparser.StatementDeParser;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
+import java.io.*;
 import java.util.ArrayList;
-
-class FormatColumn {
-
-    class ReplaceColumnAndLongValues extends ExpressionDeParser implements main.ReplaceColumnAndLongValues {
-        ArrayList tables;
-        String sql;
-
-        public ReplaceColumnAndLongValues(String sql, ArrayList tables) {
-            this.tables = tables;
-            this.sql = sql;
-        }
-        @Override
-        public void visit(Column column) {
-
-            String columnName = column.getColumnName();
-            if (!this.sql.contains("as " + columnName)) {
-                if (!(columnName.equalsIgnoreCase("false") || columnName.equalsIgnoreCase("true"))) {
-                    columnName = "\"" + columnName + "\"";
-                }
-            }
-
-            if (column.getTable() != null) {
-                if (this.tables.contains(column.getTable().toString())) {
-                    this.getBuffer().append("\"" + column.getTable().toString() + "\"" + "." + columnName);
-                }else {
-                    this.getBuffer().append(column.getTable().toString() + "." + columnName);
-                }
-            }else {
-                this.getBuffer().append(columnName);
-            }
-        }
-    }
-
-    public String format(String sql, ArrayList tables) throws JSQLParserException {
-        StringBuilder buffer = new StringBuilder();
-        ExpressionDeParser expr = new ReplaceColumnAndLongValues(sql, tables);
-        SelectDeParser selectDeparser = new SelectDeParser(expr, buffer);
-        expr.setSelectVisitor(selectDeparser);
-        expr.setBuffer(buffer);
-        StatementDeParser stmtDeparser = new StatementDeParser(expr, selectDeparser, buffer);
-        Statement stmt = CCJSqlParserUtil.parse(sql);
-        stmt.accept(stmtDeparser);
-        return stmtDeparser.getBuffer().toString();
-    }
-}
-
-class TableAddSchema {
-    public static String addSchema(String sql, String dbname) throws JSQLParserException {
-        Statement statement = CCJSqlParserUtil.parse(sql);
-        if (!(statement instanceof Select)) {
-            return sql;
-        }
-        Select select = null;
-        try {
-            select = (Select)CCJSqlParserUtil.parse(sql);
-        } catch (JSQLParserException e) {
-            System.out.println(e);
-        }
-        //Replace Table1 with hive.DB1.Table1 and Table2 with mongo.DB2.Table2
-        ExpressionDeParser expressionDeParser = new ExpressionDeParser();
-        StringBuilder buffer = new StringBuilder();
-        SelectDeParser deparser = new SelectDeParser(expressionDeParser, buffer) {
-            @Override
-            public void visit(Table tableName) {
-                String schemaName = dbname;
-                if (tableName.getAlias() != null) {
-                    this.getBuffer().append("\"" + schemaName + "\"." + "\"" + tableName.getName() + "\"" + tableName.getAlias().toString());
-                }else {
-                    this.getBuffer().append("\"" + schemaName + "\"." + "\"" + tableName.getName() + "\"");
-                }
-            }
-        };
-        expressionDeParser.setSelectVisitor(deparser);
-        expressionDeParser.setBuffer(buffer);
-        select.getSelectBody().accept(deparser);
-        return buffer.toString();
-    }
-}
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Utils {
-    public String sqlFormattingToCalcite(String sql, String dbname, ArrayList tableList){
-        // 先反向格式化一下，防止二次格式化
-        sql = this.sqlFormattingFromCalcite(sql, dbname);
-        FormatColumn formatColumn = new FormatColumn();
-        try {
-            sql = formatColumn.format(sql, tableList);
-        } catch (JSQLParserException e) {
-            System.out.println("formatColumn Error: "+ e);
-        }
-        TableAddSchema tableAddSchema = new TableAddSchema();
-        try {
-            sql = tableAddSchema.addSchema(sql, dbname);
-        } catch (JSQLParserException e) {
-            System.out.println("TableAddSchema Error: "+ e);
-        }
-        System.out.println("sqlFormattingToCalcite: "+ sql);
-        return sql;
-    }
 
-    public String sqlFormattingFromCalcite(String sql, String dbname){
-        sql = sql.replace("\"", "");
-        sql = sql.replace(dbname + '.', "");
-        sql = sql.replace("$", "");
-        sql = sql.replace("SINGLE_VALUE", "");
-        return sql;
+    public static JSONArray readJsonFile(String filePath) {
+        String jsonStr = "";
+        try {
+            File jsonFile = new File(filePath);
+            FileReader fileReader = new FileReader(jsonFile);
+            Reader reader = new InputStreamReader(new FileInputStream(jsonFile),"utf-8");
+            int ch = 0;
+            StringBuffer sb = new StringBuffer();
+            while ((ch = reader.read()) != -1) {
+                sb.append((char) ch);
+            }
+            fileReader.close();
+            reader.close();
+            jsonStr = sb.toString();
+            return JSON.parseArray(jsonStr);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+    public static JSONObject generate_json(Node node) throws Exception {
+        JSONObject res = new JSONObject();
+        res.put("name",node.name);
+        res.put("plan", RelOptUtil.toString(node.state_rel));
+        res.put("cost", node.rewriter.getCostRecordFromRelNode(node.state_rel));
+        Map tmp = new HashMap();
+        for(Object k : node.activatedRules.keySet()){
+            tmp.put(((RelOptRule) k).toString(),node.activatedRules.get(k));
+        }
+        res.put("activated_rules",tmp);
 
+        List children = node.children;
+        List<JSONObject> children_jsons = new ArrayList<>();
+        for(int i = 0;i<children.size();i++){
+            children_jsons.add(generate_json((Node) children.get(i)));
+        }
+        res.put("children",children_jsons);
+        return res;
+    }
 }

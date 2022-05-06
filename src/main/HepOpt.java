@@ -125,6 +125,7 @@ public class HepOpt {
       this.hepPlanner.setRoot(finalNode);
       finalNode = this.hepPlanner.findBestExp();
     }
+
     res.add(finalNode);
     String new_sql = converter.visitRoot(finalNode).asStatement().toSqlString(PostgresqlSqlDialect.DEFAULT).getSql();
     res.add(new_sql);

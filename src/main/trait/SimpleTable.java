@@ -12,9 +12,11 @@ import org.apache.calcite.schema.ScannableTable;
 import org.apache.calcite.schema.Statistic;
 import org.apache.calcite.schema.impl.AbstractTable;
 import org.apache.calcite.sql.type.SqlTypeName;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class SimpleTable extends AbstractTable implements ScannableTable {
 
@@ -115,5 +117,14 @@ public class SimpleTable extends AbstractTable implements ScannableTable {
             return new SimpleTable(tableName, fieldNames, fieldTypes, new SimpleTableStatistic(rowCount));
         }
 
+        public Pair<String, Vector<Pair<String, String>>> tableDiscribe(){
+            Vector<Pair<String, String>> v = new Vector<>();
+            for(int i = 0;i < fieldNames.size(); ++ i){
+                String fieldName = fieldNames.get(i);
+                String fieldType = fieldTypes.get(i).getName();
+                v.add(Pair.of(fieldName, fieldType));
+            }
+            return Pair.of(tableName, v);
+        }
     }
 }

@@ -6,19 +6,19 @@ import main.trait.SimpleTable;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.tools.Frameworks;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
+import java.util.Vector;
 
 
 public class GenerateSchema {
-    public static SchemaPlus generate_schema(JSONArray json) {
+    public static SchemaPlus generate_schema(JSONArray json, Vector<Pair<String, Vector<Pair<String, String>>>>schema_all) {
         try {
             SchemaPlus rootSchema = Frameworks.createRootSchema(true);
-
             for (int i = 0; i < json.size(); i++) {
                 JSONObject object = json.getJSONObject(i);
                 SimpleTable.Builder temTable = SimpleTable.newBuilder(object.getString("table"));
-
                 JSONArray columnsJsonArray = object.getJSONArray("columns");
 
                 for (int j = 0; j < columnsJsonArray.size(); j++) {
@@ -48,6 +48,8 @@ public class GenerateSchema {
                     temTable.addField((String) subJson.get("name"), typeName);
                 }
                 temTable.withRowCount(object.getInteger("rows"));
+                Pair<String, Vector<Pair<String, String>>> v = temTable.tableDiscribe();
+                schema_all.add(v);
                 rootSchema.add(object.getString("table"), temTable.build());
             }
             return rootSchema;

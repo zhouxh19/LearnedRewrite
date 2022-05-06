@@ -9,5 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="calcite_core_main_jar" level="project" />
+    <orderEntry type="library" name="equitas_jar" level="project" />
   </component>
 </module>

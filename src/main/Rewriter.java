@@ -10,6 +10,8 @@ import org.apache.calcite.rel.RelRoot;
 import org.apache.calcite.rel.core.*;
 // *** 规则结束
 import org.apache.calcite.rel.logical.LogicalAggregate;
+import org.apache.calcite.rel.logical.LogicalCalc;
+import org.apache.calcite.rel.logical.LogicalSort;
 import org.apache.calcite.rel.metadata.RelMetadataQuery;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.schema.SchemaPlus;
@@ -25,6 +27,7 @@ import org.apache.calcite.sql.dialect.*;
 import org.apache.calcite.tools.RelConversionException;
 import org.apache.calcite.tools.ValidationException;
 import org.apache.calcite.util.SourceStringReader;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,6 +42,7 @@ import static org.apache.calcite.avatica.util.Quoting.DOUBLE_QUOTE;
 public class Rewriter {
   public DBConn db;
   public ArrayList tableList;
+  public Vector<Pair<String, Vector<Pair<String, String>>>> schema;
   Planner planner;
   SqlDialect dialect;
   public HepOpt optimizer;
@@ -54,11 +58,13 @@ public class Rewriter {
   public List<String> rule_list = Arrays.asList("rule_agg","rule_filter","rule_join","rule_project","rule_cal","rule_orderby","rule_union");
 
   public  Rewriter(JSONArray schemaJson) throws SQLException, IOException {
+    Vector<Pair<String, Vector<Pair<String, String>>>> schema_all = new Vector<>();
+    SchemaPlus rootSchema = GenerateSchema.generate_schema(schemaJson, schema_all);
 
-    SchemaPlus rootSchema = GenerateSchema.generate_schema(schemaJson);
     SqlParser.Config parserConfig = SqlParser.config().withLex(Lex.MYSQL).withUnquotedCasing(UNCHANGED).withCaseSensitive(false).withQuoting(DOUBLE_QUOTE);
     FrameworkConfig config = Frameworks.newConfigBuilder().parserConfig(parserConfig).defaultSchema(rootSchema).build();
     this.planner = Frameworks.getPlanner(config);
+    this.schema = schema_all;
     this.dialect = PostgresqlSqlDialect.DEFAULT;
     this.optimizer = new HepOpt();
   }
@@ -81,6 +87,21 @@ public class Rewriter {
 
   public double getCostRecordFromRelNode(RelNode rel_node) throws Exception {
     return getCostFromRelNode(rel_node).getRows()+getCostFromRelNode(rel_node).getCpu()*0.01+getCostFromRelNode(rel_node).getIo()*4;
+  }
+  //remove useless nodes before verify
+  public RelNode removeOrderbyNCalc(RelNode rel_node,RelNode parent,int childIndex) {
+    for(int i = 0;i<rel_node.getInputs().size();i++){
+      removeOrderbyNCalc(rel_node.getInput(i),rel_node,i);
+    }
+    if (rel_node instanceof LogicalSort || rel_node instanceof  LogicalCalc){
+      if (parent == null){
+        rel_node = rel_node.getInput(0);
+      }
+      else {
+        parent.replaceInput(childIndex,rel_node.getInput(0));
+      }
+    }
+    return rel_node;
   }
 
   //remove useless aggregate

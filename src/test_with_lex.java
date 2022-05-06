@@ -1,5 +1,6 @@
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 import main.GenerateSchema;
 import org.apache.calcite.adapter.jdbc.JdbcSchema;
 import org.apache.calcite.config.Lex;
@@ -27,14 +28,20 @@ import java.sql.DriverManager;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import static org.apache.calcite.avatica.util.Casing.UNCHANGED;
 import static org.apache.calcite.avatica.util.Quoting.DOUBLE_QUOTE;
+
+import org.apache.commons.lang3.tuple.Pair;
+import verify.verifyrelnode;
+import com.google.gson.JsonObject;
 
 public class test_with_lex {
     public static void main(String[] args) throws Exception {
 
         String testSql = "select * from (select row_.*, aol_rownum as total_rownum from (select distinct (aol.ol_id) olId, aol.ol_nbr olNbr, aol.so_date soDate, aol.rownum as aol_rownum, (select c.region_name from tab1 c where c.common_region_id = aol.order_region_id) regionName, (select c.region_name from tab1 c where c.common_region_id = aol.so_lan_id) areaName, (select cc.name from tab2 cc where cc.channel_id = aol.channel_id and rownum < 2) channelName, (select '|' || sn1.name from tab3 as sn1 where sn1.staff_id = aol.staff_id and rownum < 2) staffName, (select t.service_name from tab4 t where t.service_kind = aol.service_type) serviceName, (select so.remark from tab5 so where so.service_offer_id = aol.action_type_name) remark, aol.access_number accessNumber from tab6 aol where aol.order_region_id < 10000 and aol.so_date >= '2022-01-01 00:00:00' and aol.so_date <= '2022-01-04 00:00:00' and not exists (select orl.ol_id from ol_rule_list orl where orl.ol_id = aol.ol_id)) row_ where aol_rownum <= 40000) as table_alias where table_alias.total_rownum >= 0";
+        Vector<Pair<String, Vector<Pair<String, String>>>>schema_all = null;
         testSql = "select\n"
                 + "    o_orderpriority,\n"
                 + "    count(*) as order_count\n"
@@ -56,7 +63,7 @@ public class test_with_lex {
                 + "    o_orderpriority\n"
                 + "order by\n"
                 + "    o_orderpriority";
-
+        // testSql = "select * from orders where o_orderpriority = 1 + 2";
         //Parse
         SqlParser.Config parserConfig = SqlParser.config().withLex(Lex.MYSQL).withUnquotedCasing(UNCHANGED).withCaseSensitive(false).withQuoting(DOUBLE_QUOTE);
         SqlNode t = SqlParser.create(testSql, parserConfig).parseStmt();
@@ -64,7 +71,7 @@ public class test_with_lex {
         //validate
         String path = System.getProperty("user.dir");
         JSONArray jobj = Utils.readJsonFile(path+"/src/main/schema.json");
-        SchemaPlus rootSchema = GenerateSchema.generate_schema(jobj);
+        SchemaPlus rootSchema = GenerateSchema.generate_schema(jobj, schema_all);
         FrameworkConfig planner_config = Frameworks.newConfigBuilder().defaultSchema(rootSchema).parserConfig(parserConfig).build();
         Planner planner = Frameworks.getPlanner(planner_config);
 
@@ -78,6 +85,9 @@ public class test_with_lex {
         System.out.println(sql_node);
         RelRoot rel_root = planner.rel(sql_node);
         RelNode rel_node = rel_root.project();
+
+        RelNode rel_org = rel_node;
+
         System.out.println("--------RELNODE PLAIN--------");
         System.out.println(RelOptUtil.toString(rel_node));
         System.out.println("--------Rel2SQL--------");
@@ -123,5 +133,11 @@ public class test_with_lex {
         String cleaned_sql = converter.visitRoot(rel_node).asStatement().toSqlString(PostgresqlSqlDialect.DEFAULT).getSql();
         System.out.println("--------Cleaned_SQL--------");
         System.out.println(cleaned_sql);
+/*
+        System.out.println("--------Equality-------------");
+        JsonObject jsres = verifyrelnode.verifyrelnode(rel_org, rel_node, testSql, cleaned_sql);
+        System.out.println(jsres);
+*/
     }
+
 }

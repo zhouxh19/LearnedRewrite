@@ -9,6 +9,8 @@ http://rewrite_demo.dbmind.cn/
 
 Co-Contributors: Jiesi Liu, Jianming Wu, Xinning Zhang
 
+**Note. Thanks for all the attention. We have moved our repo to https://github.com/evolveDB/LearnedRewrite.
+
 ## Before you run
 
 You need to configure `java` and `maven` environment properly.

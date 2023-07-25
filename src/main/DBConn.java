@@ -9,6 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+//import org.postgresql.jdbc.;
 
 
 public class DBConn {
@@ -33,15 +37,15 @@ public class DBConn {
 
   private void get_conn() throws Exception{
     Class.forName(this.DBDriver);
+    //Class.forName("org.postgresql.Driver");
     this.conn = DriverManager.getConnection("jdbc:postgresql://" + host + ":" + port + "/" + dbname, user, password);
   }
 
-  public ArrayList getTableName() {
+  public ArrayList<String> getTables() {
     ArrayList list = new ArrayList();
     try {
       Statement stmt = this.conn.createStatement();
       boolean success = stmt.execute("SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg%' AND tablename NOT LIKE 'sql_%' ORDER BY tablename;");
-//      System.out.println("getTableName success:" + success);
       if (success){
         ResultSet res = stmt.getResultSet();
         while(res.next()){
@@ -59,14 +63,51 @@ public class DBConn {
     return list;
   }
 
+  public JSONArray getColumns(String tableName) {
+    JSONArray list = new JSONArray();
+    try {
+      Statement stmt = this.conn.createStatement();
+      boolean success = stmt.execute("select column_name, data_type from information_schema.columns where table_name = '" + tableName + "';");
+      if (success){
+        ResultSet res = stmt.getResultSet();
+        while(res.next()){
+          JSONObject map = new JSONObject();
+          map.put("name", res.getString(1));
+          map.put("type", res.getString(2));
+          list.add(map);
+        }
+        stmt.close();
+      } else {
+        System.out.println("获取Column失败");
+      }
+    } catch (SQLException e) {
+      System.out.println("获取Column失败：" + e);
+    }
+    return list;
+  }
+
+  public JSONArray getSchema() {
+    JSONArray schema = new JSONArray();
+    ArrayList<String> tables = this.getTables();
+
+    for (String tableName : tables) {
+      JSONObject map = new JSONObject();
+      map.put("table", tableName);
+      map.put("rows", 0);
+      map.put("columns", this.getColumns(tableName));
+      schema.add(map);
+    }
+    System.out.println("Schmea:" + schema.toString());
+    return schema;
+  }
 
   public float getCost(String sql) {
 //    todo 处理请求异常
     float cost = -1;
     try {
       Statement stmt = this.conn.createStatement();
-      System.out.println("getting cost for sql:");
-//      System.out.println(sql);
+      //System.out.println("getting cost for sql:");
+      // System.out.println(sql);
       boolean success = stmt.execute("explain (FORMAT JSON)" + sql);
       if (success){
         ResultSet res = stmt.getResultSet();

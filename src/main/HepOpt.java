@@ -110,9 +110,9 @@ public class HepOpt {
       Boolean selected = select_rule2ruleset_bitmap.get(rule).get(i);
       if(selected){
         builder.addRuleInstance(rule_instance);
-        System.out.println(rule_instance.toString() + " RuleInstance is selected");
+        //System.out.println(rule_instance.toString() + " RuleInstance is selected");
       }
-      else System.out.println(rule_instance.toString() + " RuleInstance is not selected");
+      //else System.out.println(rule_instance.toString() + " RuleInstance is not selected");
     }
     this.hepPlanner = new HepPlanner(builder.addMatchOrder(HepMatchOrder.TOP_DOWN).build());
   }

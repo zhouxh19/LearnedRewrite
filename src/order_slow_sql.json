@@ -1,0 +1,202 @@
+[
+  {
+    "sql":" SELECT oin.order_channel AS orderChannel, oin.payment_dept_code AS deptCode, cd.`name` AS deptName, COUNT(*) AS orderNum, SUM(oin.order_total_pay_price) AS income, (CASE WHEN SUBSTRING(oin.payment_dept_code, 2, 3) = '100' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '210' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '220' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '230' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(cd.region_path, ',', 2), ',', -1) END) AS areaCode FROM order_info oin LEFT JOIN authentication.csm_dept cd ON payment_dept_code = cd.codenew WHERE '2022-11-24 23:59:59' >= oin.pay_time AND SUBSTRING(oin.payment_dept_code, 2, 3) NOT IN ('852', '285') AND SUBSTRING(oin.payment_dept_code, 1, 1) = '3' GROUP BY subString(payment_dept_code, 2, 6), order_channel ORDER BY oin.payment_dept_code",
+    "time":3.826688766479492
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0 and ( b.employee_dept_code like '2311%' or b.employee_dept_code like '3311%' ) group by order_id ) t1",
+    "time":2.9650027751922607
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0 and ( b.employee_dept_code like '2311%' or b.employee_dept_code like '3311%' ) group by order_id ) t1",
+    "time":2.9658186435699463
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0 and ( b.employee_dept_code like '2311%' or b.employee_dept_code like '3311%' ) group by order_id ) t1",
+    "time":2.826916456222534
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0 and ( b.employee_dept_code like '2311%' or b.employee_dept_code like '3311%' ) group by order_id ) t1",
+    "time":2.7929744720458984
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0 and ( b.employee_dept_code like '2311%' or b.employee_dept_code like '3311%' ) group by order_id ) t1",
+    "time":2.7891173362731934
+  },
+  {
+    "sql":" SELECT oin.order_channel AS orderChannel, oin.payment_dept_code AS deptCode, cd.`name` AS deptName, COUNT(*) AS orderNum, SUM(oin.order_total_pay_price) AS income, (CASE WHEN SUBSTRING(oin.payment_dept_code, 2, 3) = '100' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '210' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '220' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '230' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(cd.region_path, ',', 2), ',', -1) END) AS areaCode FROM order_info oin LEFT JOIN authentication.csm_dept cd ON payment_dept_code = cd.codenew WHERE '2022-11-25 23:59:59' >= oin.pay_time AND SUBSTRING(oin.payment_dept_code, 2, 3) NOT IN ('852', '285') AND SUBSTRING(oin.payment_dept_code, 1, 1) = '3' GROUP BY subString(payment_dept_code, 2, 6), order_channel ORDER BY oin.payment_dept_code",
+    "time":3.626495838165283
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam`",
+    "time":11.218114852905273
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam_item`",
+    "time":62.08260774612427
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_info`",
+    "time":33.95874500274658
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_info`",
+    "time":48.176886320114136
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_operate_log`",
+    "time":469.7704436779022
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sale_serial`",
+    "time":88.21604037284851
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sub_info`",
+    "time":51.35843515396118
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam`",
+    "time":11.132608413696289
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam_item`",
+    "time":61.982529163360596
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_info`",
+    "time":33.893994092941284
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_info`",
+    "time":48.07366752624512
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_operate_log`",
+    "time":471.2506899833679
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sale_serial`",
+    "time":88.36396408081055
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sub_info`",
+    "time":51.49236178398132
+  },
+  {
+    "sql":" SELECT oin.order_channel AS orderChannel, oin.payment_dept_code AS deptCode, cd.`name` AS deptName, COUNT(*) AS orderNum, SUM(oin.order_total_pay_price) AS income, (CASE WHEN SUBSTRING(oin.payment_dept_code, 2, 3) = '100' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '210' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '220' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '230' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(cd.region_path, ',', 2), ',', -1) END) AS areaCode FROM order_info oin LEFT JOIN authentication.csm_dept cd ON payment_dept_code = cd.codenew WHERE '2022-11-26 23:59:59' >= oin.pay_time AND SUBSTRING(oin.payment_dept_code, 2, 3) NOT IN ('852', '285') AND SUBSTRING(oin.payment_dept_code, 1, 1) = '3' GROUP BY subString(payment_dept_code, 2, 6), order_channel ORDER BY oin.payment_dept_code",
+    "time":3.5901966094970703
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam`",
+    "time":11.152957677841187
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam_item`",
+    "time":62.080039739608765
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_info`",
+    "time":33.81688976287842
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_info`",
+    "time":48.132497787475586
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_operate_log`",
+    "time":471.15450406074524
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sale_serial`",
+    "time":88.42838668823242
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sub_info`",
+    "time":51.51538348197937
+  },
+  {
+    "sql":" SELECT oin.order_channel AS orderChannel, oin.payment_dept_code AS deptCode, cd.`name` AS deptName, COUNT(*) AS orderNum, SUM(oin.order_total_pay_price) AS income, (CASE WHEN SUBSTRING(oin.payment_dept_code, 2, 3) = '100' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '210' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '220' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '230' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(cd.region_path, ',', 2), ',', -1) END) AS areaCode FROM order_info oin LEFT JOIN authentication.csm_dept cd ON payment_dept_code = cd.codenew WHERE '2022-11-27 23:59:59' >= oin.pay_time AND SUBSTRING(oin.payment_dept_code, 2, 3) NOT IN ('852', '285') AND SUBSTRING(oin.payment_dept_code, 1, 1) = '3' GROUP BY subString(payment_dept_code, 2, 6), order_channel ORDER BY oin.payment_dept_code",
+    "time":3.5795812606811523
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam`",
+    "time":11.105338335037231
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam_item`",
+    "time":62.41273856163025
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_info`",
+    "time":33.88824439048767
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_info`",
+    "time":48.19018912315369
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_operate_log`",
+    "time":471.2965829372406
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sale_serial`",
+    "time":88.2418384552002
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sub_info`",
+    "time":51.50712299346924
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0 and ( b.employee_dept_code like '2311%' or b.employee_dept_code like '3311%' ) group by order_id ) t1",
+    "time":2.842348098754883
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0 and ( b.employee_dept_code like '2531%' or b.employee_dept_code like '3531%' ) group by order_id ) t1",
+    "time":2.876965284347534
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0 and ( b.employee_dept_code like '2531%' or b.employee_dept_code like '3531%' ) group by order_id ) t1",
+    "time":2.8127036094665527
+  },
+  {
+    "sql":" SELECT oin.order_channel AS orderChannel, oin.payment_dept_code AS deptCode, cd.`name` AS deptName, COUNT(*) AS orderNum, SUM(oin.order_total_pay_price) AS income, (CASE WHEN SUBSTRING(oin.payment_dept_code, 2, 3) = '100' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '210' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '220' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '230' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(cd.region_path, ',', 2), ',', -1) END) AS areaCode FROM order_info oin LEFT JOIN authentication.csm_dept cd ON payment_dept_code = cd.codenew WHERE '2022-11-28 23:59:59' >= oin.pay_time AND SUBSTRING(oin.payment_dept_code, 2, 3) NOT IN ('852', '285') AND SUBSTRING(oin.payment_dept_code, 1, 1) = '3' GROUP BY subString(payment_dept_code, 2, 6), order_channel ORDER BY oin.payment_dept_code",
+    "time":3.5894927978515625
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam`",
+    "time":11.161200523376465
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_exam_item`",
+    "time":62.02287030220032
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_auditbiz_info`",
+    "time":33.84558939933777
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_info`",
+    "time":48.08513808250427
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_operate_log`",
+    "time":469.6809604167938
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sale_serial`",
+    "time":88.08057618141174
+  },
+  {
+    "sql":" SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_sub_info`",
+    "time":51.44858360290527
+  },
+  {
+    "sql":" select count(*) from (select a.order_id from order_info a left join order_sub_info b on a.order_id = b.order_id WHERE a.status = 0  and b.supplier_id = 'd460af4713c748b590c61385079a3bfe' group by order_id ) t1",
+    "time":2.6327943801879883
+  },
+  {
+    "sql":" SELECT oin.order_channel AS orderChannel, oin.payment_dept_code AS deptCode, cd.`name` AS deptName, COUNT(*) AS orderNum, SUM(oin.order_total_pay_price) AS income, (CASE WHEN SUBSTRING(oin.payment_dept_code, 2, 3) = '100' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '210' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '220' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) WHEN SUBSTRING_INDEX(oin.payment_dept_code, 2, 3) = '230' THEN SUBSTRING_INDEX(cd.region_path, ',', -1) ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(cd.region_path, ',', 2), ',', -1) END) AS areaCode FROM order_info oin LEFT JOIN authentication.csm_dept cd ON payment_dept_code = cd.codenew WHERE '2022-11-29 23:59:59' >= oin.pay_time AND SUBSTRING(oin.payment_dept_code, 2, 3) NOT IN ('852', '285') AND SUBSTRING(oin.payment_dept_code, 1, 1) = '3' GROUP BY subString(payment_dept_code, 2, 6), order_channel ORDER BY oin.payment_dept_code",
+    "time":3.634770631790161
+  }
+]

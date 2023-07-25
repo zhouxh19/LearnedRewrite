@@ -1,0 +1,43 @@
+SELECT COUNT(*)
+FROM (SELECT order_id
+FROM order_info
+WHERE status = 0
+GROUP BY order_id) AS t383
+INNER JOIN (SELECT order_id
+FROM order_sub_info
+WHERE employee_dept_code LIKE '2311%' OR employee_dept_code LIKE '3311%'
+GROUP BY order_id) AS t385 ON t383.order_id = t385.order_id;
++----------+
+| COUNT(*) |
++----------+
+|    55967 |
++----------+
+1 row in set (1.74 sec)
+
+select count(*)
+from (select a.order_id
+from order_info a
+left join order_sub_info b on a.order_id = b.order_id
+WHERE a.status = 0
+and (b.employee_dept_code like '2311%'
+or b.employee_dept_code like '3311%')
+group by order_id) t1;
++----------+
+| count(*) |
++----------+
+|    55967 |
++----------+
+1 row in set (1.87 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+

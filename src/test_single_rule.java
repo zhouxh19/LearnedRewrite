@@ -1,4 +1,5 @@
 import com.alibaba.fastjson.JSONArray;
+import main.DBConn;
 import main.Rewriter;
 import main.Utils;
 import org.apache.calcite.plan.RelOptRule;
@@ -26,39 +27,30 @@ public class test_single_rule {
         return builder;
     }
     public static void main(String[] args) throws Exception{
-        String path = System.getProperty("user.dir");
-        JSONArray schemaJson = Utils.readJsonFile(path+"/src/main/schema.json");
-        Rewriter rewriter = new Rewriter(schemaJson);
+
+        String host = "166.111.121.55";
+        String port = "15432";
+        String user = "postgres";
+        String passwd= "kDZCNgUV0zJwdq9";
+        String dbname= "tpch10x";
+        String dbDriver = "org.postgresql.Driver";
+        DBConn db = new DBConn(host,port,user,passwd,dbname,dbDriver);
+        Rewriter rewriter = new Rewriter(db);
+
         String testSql;
 
         testSql = "select l_discount,count (distinct l_orderkey), sum(distinct l_tax)\n" +
                 "from lineitem, part\n" +
                 "where l_discount > 100 group by l_discount;";
-        /*testSql = "select distinct l_orderkey " +
-                "from lineitem left join part on l_orderkey = p_partkey;";
-        testSql = "SELECT\n" +
-                "  MAX(distinct l_orderkey)\n" +
-                "FROM\n" +
-                "  lineitem\n" +
-                "where\n" +
-                "  exists(\n" +
-                "    SELECT\n" +
-                "      MAX(c_custkey)\n" +
-                "    FROM\n" +
-                "      customer\n" +
-                "    where\n" +
-                "      c_custkey = l_orderkey\n" +
-                "    GROUP BY\n" +
-                "      c_custkey\n" +
-                "  );";
-        */
+
         testSql = testSql.replace(";", "");
         RelNode testRelNode = rewriter.SQL2RA(testSql);
         RelToSqlConverter converter = new RelToSqlConverter(PostgresqlSqlDialect.DEFAULT);
 
-        RelOptRule rule_instance = CoreRules.AGGREGATE_JOIN_REMOVE;
+        RelOptRule ruleInstance = Utils.rule2RuleClass("AGGREGATE_JOIN_REMOVE");
 
-        HepProgramBuilder builder = getbuilder(rule_instance);
+
+        HepProgramBuilder builder = getbuilder(ruleInstance);
         HepPlanner hepPlanner = new HepPlanner(builder.addMatchOrder(HepMatchOrder.TOP_DOWN).build());
         hepPlanner.setRoot(testRelNode);
         RelNode rewrite_result = hepPlanner.findBestExp();

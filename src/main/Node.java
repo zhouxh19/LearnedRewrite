@@ -22,15 +22,14 @@ public class Node {
   Rewriter rewriter;
   public List children = new ArrayList();
   Node parent;
-  List rewrite_sequence = new ArrayList();
+  public List rewrite_sequence = new ArrayList<String>();
   int node_num = 1;
 
   public float origin_cost;
   float gamma;
   int selected = 0;
   Map activatedRules = new HashMap();
-  String name= "";
-
+  String name = "";
 
   public Node(String sql,
               RelNode state_rel,
@@ -42,15 +41,20 @@ public class Node {
               ) throws Exception {
     this.state = sql;
     this.state_rel = state_rel;
-    this.reward = (float) (origin_cost - rewriter.getCostRecordFromRelNode(state_rel));
+    //this.reward = (float) (origin_cost - rewriter.getCostRecordFromRelNode(state_rel));
     this.rewriter = rewriter;
+    this.reward = (float) (origin_cost - this.rewriter.db.getCost(sql));
     this.parent = parent;
     this.origin_cost = origin_cost;
     this.gamma = gamma;
     this.name = name;
 
+    if (!Objects.equals(name, "")){
+      this.rewrite_sequence.addAll(rewriter.rulegroup2rules.get(name));
+    }
+
   }
-  public void add_child(String csql,RelNode relNode,float origin_cost,Rewriter rewriter,Map activatedRules,String name)
+  public void add_child(String csql,RelNode relNode,float origin_cost,Rewriter rewriter,Map activatedRules, String name)
           throws Exception {
     Node child = new Node(csql,relNode,origin_cost,rewriter,this.gamma,parent,name);
     child.activatedRules = activatedRules;
@@ -75,23 +79,24 @@ public class Node {
     for(String rule: this.rewriter.rule2class.keySet()) {
       if (rule_check(this.state_rel, rewriter.rule2class.get(rule))){
 
-        System.out.println("\u001B[35m" + rule+ " Module is selected " + "\u001B[0m");
+        //System.out.println("\u001B[35m" + rule+ " Module is selected " + "\u001B[0m");
         List res = this.rewriter.singleRewrite(this.state_rel, rule);
         Map activatedRules = new HashMap();
         String csql = (String) res.get(1);
-        double new_cost = this.rewriter.getCostRecordFromRelNode((RelNode) res.get(0));
+        //double new_cost = this.rewriter.getCostRecordFromRelNode((RelNode) res.get(0));
+        double new_cost = this.rewriter.db.getCost(csql);
         if (new_cost == -1){
+          System.out.println(csql);
           return;
         }
         if (new_cost<=this.origin_cost){
           //todo rule selection
           //self.used_rule_num = self.used_rule_num + self.rewriter.rulenums[self.rewriter.related_rule_list[i]]
-          System.out.println("new node added..");
+          //System.out.println("new node added..");
           this.add_child(csql, (RelNode) res.get(0),this.origin_cost,this.rewriter,activatedRules,rule);
         }
       }
     }
-
   }
 
   private boolean is_terminal(){

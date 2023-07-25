@@ -1,0 +1,1 @@
+select max(distinct l_orderkey) from lineitem where exists(select max(c_custkey) from customer where c_custkey = l_orderkey group by c_custkey);

@@ -1,7 +1,7 @@
 
 <div align="center">
 
-**A Demo of SQL Rewrite.**
+**An Product for SQL-Rewrite.**
 
 ------
 
@@ -19,13 +19,11 @@
 
 ## What's New?
 
-- July 2023: We add 100+ new rules to enhance the rewrite capability 
-
-  *by zhaoyan and jianming in the single-rule branch*
-
-- June 2023: Our demo is accepted in VLDB 2023
-
 - May 2022: First Commit
+
+- logic operators 
+
+- 
 
 
 ## Overview
@@ -93,19 +91,12 @@ Please cite our paper if you use SQL-Rewriter in your work
   year      = {2021},
 }
 ```
+## Contributors
 
-```bibtex
-@article{demovldb2023,
-  author    = {Xuanhe Zhou and
-               Guoliang Li and
-               Jianming Wu and
-               Jiesi Liu and
-               Zhaoyan Sun and
-               Xinning Zhang},
-  title     = {A Learned Query Rewrite System},
-  journal   = {Proc. {VLDB} Endow.},
-  year      = {2023},
-}
-```
+<!-- Copy-paste in your Readme.md file -->
+
+<a href="https://github.com/evolveDB/3-SQL-Rewriter/network/dependencies">
+  <img src="https://contrib.rocks/image?repo=evolveDB/3-SQL-Rewriter" />
+</a>
 
 We thank all the  contributors to this project, more contributors are welcome!

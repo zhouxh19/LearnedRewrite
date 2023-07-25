@@ -80,6 +80,21 @@ Major improvement/enhancement in future.
 Please cite our paper if you use SQL-Rewriter in your work
 
 ```bibtex
+@article{demovldb2023,
+  author    = {Xuanhe Zhou and
+               Guoliang Li and
+               Jianming Wu and
+               Jiesi Liu and
+               Zhaoyan Sun and
+               Xinning Zhang},
+  title     = {A Learned Query Rewrite System},
+  journal   = {Proc. {VLDB} Endow.},
+  year      = {2023},
+}
+```
+
+
+```bibtex
 @article{DBLP:journals/pvldb/ZhouLCF21,
   author    = {Xuanhe Zhou and
                Guoliang Li and
@@ -91,20 +106,6 @@ Please cite our paper if you use SQL-Rewriter in your work
   number    = {1},
   pages     = {46--58},
   year      = {2021},
-}
-```
-
-```bibtex
-@article{demovldb2023,
-  author    = {Xuanhe Zhou and
-               Guoliang Li and
-               Jianming Wu and
-               Jiesi Liu and
-               Zhaoyan Sun and
-               Xinning Zhang},
-  title     = {A Learned Query Rewrite System},
-  journal   = {Proc. {VLDB} Endow.},
-  year      = {2023},
 }
 ```
 

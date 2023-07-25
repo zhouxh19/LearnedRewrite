@@ -21,7 +21,7 @@
 
 - July 2023: We add 100+ new rules to enhance the rewrite capability 
 
-  *by zhaoyan and jianming in the single-rule branch*
+  *by zhaoyan and jianming in the [single-rule](https://github.com/zhouxh19/LearnedRewrite/tree/single-rule) branch*
 
 - June 2023: Our demo is accepted in VLDB 2023
 

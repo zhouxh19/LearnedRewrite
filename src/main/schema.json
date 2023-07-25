@@ -34,10 +34,20 @@
       {
         "name":"c_comment",
         "type":"character varying"
+      }
+    ]
+  },
+  {
+    "table":"ol_rule_list",
+    "rows":1000,
+    "columns":[
+      {
+        "name":"ol_id",
+        "type":"integer"
       },
       {
-        "name":"c_null",
-        "type":"character varying"
+        "name":"rownum",
+        "type":"integer"
       }
     ]
   },
@@ -108,10 +118,6 @@
       {
         "name":"l_comment",
         "type":"character varying"
-      },
-      {
-        "name":"l_null",
-        "type":"character varying"
       }
     ]
   },
@@ -134,24 +140,6 @@
       {
         "name":"n_comment",
         "type":"character varying"
-      },
-      {
-        "name":"n_null",
-        "type":"character varying"
-      }
-    ]
-  },
-  {
-    "table":"ol_rule_list",
-    "rows":1000,
-    "columns":[
-      {
-        "name":"ol_id",
-        "type":"integer"
-      },
-      {
-        "name":"rownum",
-        "type":"integer"
       }
     ]
   },
@@ -193,10 +181,6 @@
       },
       {
         "name":"o_comment",
-        "type":"character varying"
-      },
-      {
-        "name":"o_null",
         "type":"character varying"
       }
     ]
@@ -240,10 +224,6 @@
       {
         "name":"p_comment",
         "type":"character varying"
-      },
-      {
-        "name":"p_null",
-        "type":"character varying"
       }
     ]
   },
@@ -270,10 +250,6 @@
       {
         "name":"ps_comment",
         "type":"character varying"
-      },
-      {
-        "name":"ps_null",
-        "type":"character varying"
       }
     ]
   },
@@ -291,10 +267,6 @@
       },
       {
         "name":"r_comment",
-        "type":"character varying"
-      },
-      {
-        "name":"r_null",
         "type":"character varying"
       }
     ]
@@ -329,10 +301,6 @@
       },
       {
         "name":"s_comment",
-        "type":"character varying"
-      },
-      {
-        "name":"s_null",
         "type":"character varying"
       }
     ]

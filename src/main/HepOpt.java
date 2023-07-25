@@ -28,7 +28,7 @@ public class HepOpt {
   RelToSqlConverter converter;
   // IF YOU CHANGE THE MAP rule2ruleset, THEN DON'T FORGET TO CHANGE THE FILE standard.txt IN ORDER!!!
   Map<String, List<RelOptRule>> rule2ruleset = Map.of(
-          "rule_agg", Arrays.<RelOptRule>asList(CoreRules.AGGREGATE_EXPAND_DISTINCT_AGGREGATES_TO_JOIN,CoreRules.AGGREGATE_JOIN_TRANSPOSE_EXTENDED,CoreRules.AGGREGATE_PROJECT_MERGE,CoreRules.AGGREGATE_ANY_PULL_UP_CONSTANTS,CoreRules.AGGREGATE_UNION_AGGREGATE,CoreRules.AGGREGATE_UNION_TRANSPOSE,CoreRules.AGGREGATE_VALUES, PruneEmptyRules.AGGREGATE_INSTANCE),
+          "rule_agg", Arrays.<RelOptRule>asList(CoreRules.AGGREGATE_EXPAND_DISTINCT_AGGREGATES,CoreRules.AGGREGATE_EXPAND_DISTINCT_AGGREGATES_TO_JOIN,CoreRules.AGGREGATE_JOIN_TRANSPOSE_EXTENDED,CoreRules.AGGREGATE_PROJECT_MERGE,CoreRules.AGGREGATE_ANY_PULL_UP_CONSTANTS,CoreRules.AGGREGATE_UNION_AGGREGATE,CoreRules.AGGREGATE_UNION_TRANSPOSE,CoreRules.AGGREGATE_VALUES, PruneEmptyRules.AGGREGATE_INSTANCE),
           "rule_filter",Arrays.<RelOptRule>asList(CoreRules.FILTER_AGGREGATE_TRANSPOSE,CoreRules.FILTER_CORRELATE,CoreRules.FILTER_INTO_JOIN,CoreRules.JOIN_CONDITION_PUSH,CoreRules.FILTER_MERGE,CoreRules.FILTER_MULTI_JOIN_MERGE, CoreRules.FILTER_PROJECT_TRANSPOSE,CoreRules.FILTER_SET_OP_TRANSPOSE,CoreRules.FILTER_TABLE_FUNCTION_TRANSPOSE,CoreRules.FILTER_SCAN,CoreRules.FILTER_REDUCE_EXPRESSIONS,CoreRules.PROJECT_REDUCE_EXPRESSIONS,PruneEmptyRules.FILTER_INSTANCE),
           "rule_join",Arrays.<RelOptRule>asList(CoreRules.JOIN_EXTRACT_FILTER,CoreRules.JOIN_PROJECT_BOTH_TRANSPOSE,CoreRules.JOIN_PROJECT_LEFT_TRANSPOSE,CoreRules.JOIN_PROJECT_RIGHT_TRANSPOSE,CoreRules.JOIN_LEFT_UNION_TRANSPOSE,CoreRules.JOIN_RIGHT_UNION_TRANSPOSE,CoreRules.SEMI_JOIN_REMOVE,CoreRules.JOIN_REDUCE_EXPRESSIONS,PruneEmptyRules.JOIN_LEFT_INSTANCE,PruneEmptyRules.JOIN_RIGHT_INSTANCE),
           "rule_project",Arrays.<RelOptRule>asList(CoreRules.PROJECT_CALC_MERGE,CoreRules.PROJECT_CORRELATE_TRANSPOSE,CoreRules.PROJECT_MERGE,CoreRules.PROJECT_MULTI_JOIN_MERGE, CoreRules.PROJECT_REMOVE,CoreRules.PROJECT_TO_CALC,CoreRules.PROJECT_SUB_QUERY_TO_CORRELATE,CoreRules.PROJECT_REDUCE_EXPRESSIONS,PruneEmptyRules.PROJECT_INSTANCE),
@@ -129,7 +129,7 @@ public class HepOpt {
     res.add(finalNode);
     String new_sql = converter.visitRoot(finalNode).asStatement().toSqlString(PostgresqlSqlDialect.DEFAULT).getSql();
     res.add(new_sql);
-    res.add(this.hepPlanner.getActivatedRules());
+    res.add(this.hepPlanner.getRules());
     return res;
   }
 }

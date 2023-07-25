@@ -34,8 +34,27 @@ import static org.apache.calcite.avatica.util.Quoting.DOUBLE_QUOTE;
 
 public class Utils {
 
-    public static JSONArray readJsonFile(String filePath) {
-        String jsonStr = "";
+    public static void writeContentStringToLocalFile(String str,String path){
+        try {
+            File file = new File(path);
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            file.createNewFile();
+            if(str != null && !"".equals(str)){
+                FileWriter fw = new FileWriter(file, true);
+                fw.write(str);
+                fw.flush();
+                fw.close();
+                System.out.println("执行完毕!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String readStringFromFile(String filePath) {
+        String contentStr = "";
         try {
             File jsonFile = new File(filePath);
             FileReader fileReader = new FileReader(jsonFile);
@@ -47,12 +66,23 @@ public class Utils {
             }
             fileReader.close();
             reader.close();
-            jsonStr = sb.toString();
-            return JSON.parseArray(jsonStr);
+            contentStr = sb.toString();
+            return contentStr;
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return "[]";
         }
+    }
+
+    public static String[] readWorkloadFromFile(String filePath) {
+        String contentStr = Utils.readStringFromFile(filePath);
+        String[] result = contentStr.split(";");
+        return result;
+    }
+
+    public static JSONArray readJsonFile(String filePath) {
+        String contentStr = Utils.readStringFromFile(filePath);
+        return JSON.parseArray(contentStr);
     }
     public static JSONObject generate_json(Node node) throws Exception {
         JSONObject res = new JSONObject();
@@ -62,6 +92,10 @@ public class Utils {
         Map tmp = new HashMap();
         for(Object k : node.activatedRules.keySet()){
             tmp.put(((RelOptRule) k).toString(),node.activatedRules.get(k));
+        }
+        int tsz = 0;
+        for(Object k :node.rewrite_sequence){
+            res.put(String.format("act_rule_%d",++tsz),k);
         }
         res.put("activated_rules",tmp);
 
@@ -351,5 +385,16 @@ public class Utils {
             }
         }
         return res;
+    }
+    public static void dfs_mtcs_tree(Node node, int depth){
+        if(node.parent == null){
+            System.out.println("Original Query");
+            System.out.println(node.state_rel.explain());
+            // System.out.println(node.activatedRules);
+            return;
+        }
+        dfs_mtcs_tree(node.parent, depth + 1);
+        System.out.println(node.activatedRules);
+        System.out.println(node.state_rel.explain());
     }
 }

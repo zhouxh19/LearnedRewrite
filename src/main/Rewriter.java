@@ -20,6 +20,7 @@ import org.apache.calcite.sql.SqlExplainLevel;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.apache.calcite.tools.FrameworkConfig;
 import org.apache.calcite.tools.Frameworks;
 import org.apache.calcite.tools.Planner;
@@ -61,7 +62,7 @@ public class Rewriter {
     Vector<Pair<String, Vector<Pair<String, String>>>> schema_all = new Vector<>();
     SchemaPlus rootSchema = GenerateSchema.generate_schema(schemaJson, schema_all);
 
-    SqlParser.Config parserConfig = SqlParser.config().withLex(Lex.MYSQL).withUnquotedCasing(UNCHANGED).withCaseSensitive(false).withQuoting(DOUBLE_QUOTE);
+    SqlParser.Config parserConfig = SqlParser.config().withLex(Lex.MYSQL).withUnquotedCasing(UNCHANGED).withCaseSensitive(false).withQuoting(DOUBLE_QUOTE).withConformance(SqlConformanceEnum.MYSQL_5);
     FrameworkConfig config = Frameworks.newConfigBuilder().parserConfig(parserConfig).defaultSchema(rootSchema).build();
     this.planner = Frameworks.getPlanner(config);
     this.schema = schema_all;
@@ -139,12 +140,15 @@ public class Rewriter {
     this.planner.close();
     this.planner.reset();
 
+    sql = sql.replace(";", "");
+    sql = sql.replace("!=", "<>");
+
     SqlNode sql_node = this.planner.parse(new SourceStringReader(sql));
     sql_node = this.planner.validate(sql_node);
 
     RelRoot rel_root = this.planner.rel(sql_node);
     RelNode rel_node = rel_root.project();
-    rel_node = rel_formatting(rel_node);
+//    rel_node = rel_formatting(rel_node);
 //    System.out.println("RELNODE PLAIN");
 //    System.out.println(RelOptUtil.toString(rel_node));
     return rel_node;

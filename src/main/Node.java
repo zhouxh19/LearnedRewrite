@@ -55,7 +55,6 @@ public class Node {
     Node child = new Node(csql,relNode,origin_cost,rewriter,this.gamma,parent,name);
     child.activatedRules = activatedRules;
     this.children.add(child);
-
   }
 
   public boolean rule_check(RelNode relNode, Class clazz){
@@ -78,13 +77,13 @@ public class Node {
 
         System.out.println("\u001B[35m" + rule+ " Module is selected " + "\u001B[0m");
         List res = this.rewriter.singleRewrite(this.state_rel, rule);
-        Map activatedRules = (Map) res.get(2);
+        Map activatedRules = new HashMap();
         String csql = (String) res.get(1);
         double new_cost = this.rewriter.getCostRecordFromRelNode((RelNode) res.get(0));
         if (new_cost == -1){
           return;
         }
-        if (activatedRules.size()>0 && new_cost<=this.origin_cost){
+        if (new_cost<=this.origin_cost){
           //todo rule selection
           //self.used_rule_num = self.used_rule_num + self.rewriter.rulenums[self.rewriter.related_rule_list[i]]
           System.out.println("new node added..");
@@ -149,7 +148,6 @@ public class Node {
         reward = c.reward;
       }
     }
-
     return reward;
   }
 
@@ -217,6 +215,5 @@ public class Node {
 
     }
     return best_node;
-
   }
 }
